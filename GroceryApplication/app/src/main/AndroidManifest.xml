@@ -28,7 +28,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC5FxknpU0_to6bpcnRG6zj19dO-zHtBbQ" />
+            android:value="AIzaSyDL0bnP_fCTlNVDMOP93qzQRLr3Rn0u4dk" />
 
         <activity
             android:name=".activities.CartActivity"
