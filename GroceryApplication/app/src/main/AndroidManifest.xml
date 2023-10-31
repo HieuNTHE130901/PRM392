@@ -35,9 +35,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC5FxknpU0_to6bpcnRG6zj19dO-zHtBbQ" />
 
-        <activity
-            android:name=".activities.CartActivity"
-            android:exported="false" />
+
         <activity
             android:name=".activities.HomeActivity"
             android:exported="false"

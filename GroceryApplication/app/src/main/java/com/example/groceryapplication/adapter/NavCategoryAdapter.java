@@ -1,6 +1,7 @@
 package com.example.groceryapplication.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +21,7 @@ import java.util.List;
 public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.ViewHolder> {
     private Context context;
     private List<NavCategory> list;
+    double totalPrice=0;
 
     public NavCategoryAdapter(Context context, List<NavCategory> list) {
         this.context = context;
@@ -40,6 +43,8 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
         holder.quantity.setText(list.get(position).getTotalQuantity());
         holder.date.setText(list.get(position).getCurrentDate());
         holder.time.setText(list.get(position).getCurrentTime());
+
+
     }
 
     @Override

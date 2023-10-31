@@ -49,7 +49,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -66,7 +65,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             name = itemView.findViewById(R.id.item_name);
             description = itemView.findViewById(R.id.item_description);
             price = itemView.findViewById(R.id.item_price);
-
         }
     }
 }
