@@ -1,5 +1,6 @@
 # PRM392
-•Develop an Product Sale Application
+• Develop an Product Sale Application
+
 – Sign Up/Login screen: manage users
 – List of Products screen: show list of products
 – Product details screen: show information of a product
