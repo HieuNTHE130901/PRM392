@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.groceryapplication.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.groceryapplication.ui.profile.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/nav_new_product"
+        android:name="com.example.groceryapplication.ui.newproduct.NewProductFragment"
+        android:label="@string/menu_new_product"
+        tools:layout="@layout/fragment_new_product" />
+
+    <fragment
+        android:id="@+id/nav_offer"
+        android:name="com.example.groceryapplication.ui.offer.OfferFragment"
+        android:label="@string/menu_offer"
+        tools:layout="@layout/fragment_offer" />
+    <fragment
+        android:id="@+id/nav_map"
+        android:name="com.example.groceryapplication.ui.map.MapsFragment"
+        android:label="@string/menu_map"
+        tools:layout="@layout/fragment_maps" />
+
+
+</navigation>
