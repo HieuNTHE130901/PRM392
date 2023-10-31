@@ -22,7 +22,7 @@ https://www.youtube.com/playlist?list=PLesEwfOYAU4YcaYveepDhq3wQI4iqLlPe
 
 Project đã có logig/register & map
 
-Hiếu: - Billing payment - Show notification
+Hiếu: - Billing payment - Show notification - Signup - Map
 
 Hùng:
 
