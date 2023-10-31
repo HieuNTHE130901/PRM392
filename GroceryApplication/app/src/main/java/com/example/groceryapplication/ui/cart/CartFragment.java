@@ -40,7 +40,7 @@ public class CartFragment extends Fragment {
 
         recyclerView= root.findViewById(R.id.cart_rec);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         categoryList = new ArrayList<>();
         navCategoryAdapter = new NavCategoryAdapter(getActivity(), categoryList);
         recyclerView.setAdapter(navCategoryAdapter);

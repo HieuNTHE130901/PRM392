@@ -13,9 +13,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:title="Product details"
+            android:background="@color/purple_700"
+            android:titleTextColor="@android:color/white"
             tools:ignore="MissingConstraints" />
 
     <ImageView
+        android:layout_marginTop="10dp"
         android:id="@+id/item_detail_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
@@ -51,7 +54,7 @@
 
         <TextView
             android:padding="10dp"
-            android:id="@+id/item_price"
+            android:id="@+id/item_detail_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Price"
@@ -73,7 +76,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/add_item"
                 android:layout_width="40dp"
                 android:layout_height="50dp"

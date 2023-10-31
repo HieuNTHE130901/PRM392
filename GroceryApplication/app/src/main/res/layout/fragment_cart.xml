@@ -9,6 +9,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cart_rec"
         android:layout_width="match_parent"
-        android:layout_height="345dp"
+        android:layout_height="630dp"
         android:layout_margin="6dp" />
 </FrameLayout>
