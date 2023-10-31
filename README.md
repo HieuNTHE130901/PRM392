@@ -35,8 +35,6 @@ Hiếu: - Billing payment - Show notification - Signup - Map - List of product
 
 Hùng:
 
-Đức:
-
 Nghĩa:
 
 Cường:
