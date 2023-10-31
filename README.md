@@ -20,7 +20,7 @@
 Tham khảo code ở đây
 https://www.youtube.com/playlist?list=PLesEwfOYAU4YcaYveepDhq3wQI4iqLlPe
 
-Project đã có logig/register & map
+Project đã có login/register & map
 
 Hiếu: - Billing payment - Show notification - Signup - Map
 
