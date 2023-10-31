@@ -1,50 +1,80 @@
 package com.example.groceryapplication.models;
 
 public class NavCategory {
-    private String name;
-    private String img_url;
-    private String description;
-    private String price;
+    private String product_img_url;
+    private String productName;
+    private String productPrice;
+    private String totalQuantity;
+    private String totalPrice;
 
+    private String currentDate;
+    private String currentTime;
     public NavCategory() {
     }
 
-    public NavCategory(String name, String img_url, String description, String price) {
-        this.name = name;
-        this.img_url = img_url;
-        this.description = description;
-        this.price = price;
+    public NavCategory(String product_img_url, String productName, String productPrice, String totalQuantity, String totalPrice, String currentDate, String currentTime) {
+        this.product_img_url = product_img_url;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.totalQuantity = totalQuantity;
+        this.totalPrice = totalPrice;
+        this.currentDate = currentDate;
+        this.currentTime = currentTime;
     }
 
-    public String getName() {
-        return name;
+    public String getProduct_img_url() {
+        return product_img_url;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProduct_img_url(String product_img_url) {
+        this.product_img_url = product_img_url;
     }
 
-    public String getImg_url() {
-        return img_url;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setImg_url(String img_url) {
-        this.img_url = img_url;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getProductPrice() {
+        return productPrice;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProductPrice(String productPrice) {
+        this.productPrice = productPrice;
     }
 
-    public String getPrice() {
-        return price;
+    public String getTotalQuantity() {
+        return totalQuantity;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setTotalQuantity(String totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(String currentDate) {
+        this.currentDate = currentDate;
+    }
+
+    public String getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(String currentTime) {
+        this.currentTime = currentTime;
     }
 }

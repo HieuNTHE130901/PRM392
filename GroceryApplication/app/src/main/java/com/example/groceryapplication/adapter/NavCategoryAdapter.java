@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.groceryapplication.R;
-import com.example.groceryapplication.models.Item;
 import com.example.groceryapplication.models.NavCategory;
 
 import java.util.List;
@@ -34,11 +33,13 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull NavCategoryAdapter.ViewHolder holder, int position) {
-        Glide.with(context).load(list.get(position).getImg_url()).into(holder.imgView);
-        holder.name.setText(list.get(position).getName());
-        holder.description.setText(list.get(position).getDescription());
-        holder.price.setText("Price: "+list.get(position).getPrice()+" $/kg");
-
+        Glide.with(context).load(list.get(position).getProduct_img_url()).into(holder.img);
+        holder.name.setText(list.get(position).getProductName());
+        holder.price.setText(list.get(position).getProductPrice());
+        holder.totalprice.setText(list.get(position).getTotalPrice());
+        holder.quantity.setText(list.get(position).getTotalQuantity());
+        holder.date.setText(list.get(position).getCurrentDate());
+        holder.time.setText(list.get(position).getCurrentTime());
     }
 
     @Override
@@ -48,16 +49,17 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imgView;
-        TextView name,description,price;
+        ImageView img;
+        TextView name,price,totalprice,quantity,date,time;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgView = itemView.findViewById(R.id.nav_cat_img);
+            img = itemView.findViewById(R.id.nav_cat_img);
             name = itemView.findViewById(R.id.nav_cat_name);
-
-            description = itemView.findViewById(R.id.nav_cat_description);
-
             price = itemView.findViewById(R.id.nav_cat_price);
+            totalprice = itemView.findViewById(R.id.nav_cat_total_price_of_product);
+            quantity = itemView.findViewById(R.id.nav_cat_totalquantity);
+            date = itemView.findViewById(R.id.nav_cat_date);
+            time = itemView.findViewById(R.id.nav_cat_time);
         }
     }
 }
