@@ -20,19 +20,27 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Fruit" />
+                android:layout_marginTop="10dp"
+                android:text="Fruit"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="24sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 android:id="@+id/rec_fruit"/>
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Vegetable" />
+                android:layout_marginTop="10dp"
+                android:text="Vegetable"
+                android:textAlignment="center"
+                android:textColor="#020202"
+                android:textSize="24sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"

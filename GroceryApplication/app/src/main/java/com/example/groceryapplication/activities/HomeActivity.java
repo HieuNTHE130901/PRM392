@@ -8,6 +8,7 @@ import android.view.Menu;
 
 import com.example.groceryapplication.MainActivity;
 import com.example.groceryapplication.R;
+import com.example.groceryapplication.ui.cart.CartFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -41,7 +42,6 @@ public class HomeActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -67,8 +67,9 @@ public class HomeActivity extends AppCompatActivity {
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_cart) {
-            Intent cartIntent = new Intent(this, CartActivity.class);
-            startActivity(cartIntent);
+            // Open CartFragment
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
+            navController.navigate(R.id.nav_cart);
             return true;
         } else if (itemId == R.id.action_home) {
             Intent homeIntent = new Intent(this, HomeActivity.class);
