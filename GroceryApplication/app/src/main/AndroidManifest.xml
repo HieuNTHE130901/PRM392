@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -16,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroceryApplication"
         tools:targetApi="31">
+        <activity
+            android:name=".test.PaymentDetails"
+            android:exported="false" />
+        <activity
+            android:name=".test.PaypalPaymentActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.DetailActivity"
             android:exported="false" />
@@ -36,7 +41,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDL0bnP_fCTlNVDMOP93qzQRLr3Rn0u4dk" />
-
 
         <activity
             android:name=".activities.HomeActivity"
