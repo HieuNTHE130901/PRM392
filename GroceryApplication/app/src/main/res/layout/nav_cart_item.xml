@@ -10,15 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="#FFD1D9"
+        android:orientation="horizontal"
         android:padding="10dp">
 
         <ImageView
             android:id="@+id/nav_cat_img"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/dota_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop" />
 
         <LinearLayout
@@ -35,7 +34,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name: "
+                    android:text="Product Name: "
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -71,6 +70,7 @@
                     android:textSize="16sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -92,6 +92,7 @@
                     android:textSize="16sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -113,6 +114,7 @@
                     android:textSize="16sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -134,6 +136,7 @@
                     android:textSize="16sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -154,11 +157,18 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
+
             </LinearLayout>
 
 
-
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/delete"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:baselineAligned="false"
+            android:src="@drawable/ic_delete" />
 
     </LinearLayout>
 

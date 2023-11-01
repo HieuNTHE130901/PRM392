@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -15,6 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.models.NavCategory;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -22,10 +27,14 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
     private Context context;
     private List<NavCategory> list;
     double totalPrice=0;
+    FirebaseFirestore firestore;
+    FirebaseAuth auth;
 
     public NavCategoryAdapter(Context context, List<NavCategory> list) {
         this.context = context;
         this.list = list;
+        firestore = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
     }
 
     @NonNull
@@ -39,13 +48,35 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
         Glide.with(context).load(list.get(position).getProduct_img_url()).into(holder.img);
         holder.name.setText(list.get(position).getProductName());
         holder.price.setText(list.get(position).getProductPrice());
-        holder.totalprice.setText(list.get(position).getTotalPrice());
+        double totalPrice = Double.parseDouble(list.get(position).getTotalPrice());
+        String roundedTotalPrice = String.format("%.2f", totalPrice);
+        holder.totalprice.setText(roundedTotalPrice);
         holder.quantity.setText(list.get(position).getTotalQuantity());
         holder.date.setText(list.get(position).getCurrentDate());
         holder.time.setText(list.get(position).getCurrentTime());
+        holder.deleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firestore.collection("CurrentUser").document(auth.getCurrentUser().getUid()).collection("AddToCart").document(list.get(position).getDocummentId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            list.remove(list.get(position));
+                            notifyDataSetChanged();
+                            Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
+
+
+                        }else{
+                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
 
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -54,7 +85,7 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView img;
+        ImageView img, deleteItem;
         TextView name,price,totalprice,quantity,date,time;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +96,7 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
             quantity = itemView.findViewById(R.id.nav_cat_totalquantity);
             date = itemView.findViewById(R.id.nav_cat_date);
             time = itemView.findViewById(R.id.nav_cat_time);
+            deleteItem = itemView.findViewById(R.id.delete);
         }
     }
 }

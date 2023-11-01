@@ -8,7 +8,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cart_rec"
         android:layout_width="match_parent"
-        android:layout_height="609dp"
+        android:layout_height="503dp"
         android:padding="10dp"
         tools:ignore="MissingConstraints" />
 
@@ -36,7 +36,7 @@
                 android:id="@+id/cart_total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Money"
+                android:text="0,00"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="18sp"
                 android:textStyle="bold" />

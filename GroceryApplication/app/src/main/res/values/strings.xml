@@ -25,5 +25,5 @@
     <string name="menu_offer">Offer</string>
     <string name="menu_map">Store location</string>
     <string name="menu_mapp">Store location</string>
-    <string name="menu_cart">Your Cart</string>
+    <string name="menu_cart">My Cart</string>
 </resources>

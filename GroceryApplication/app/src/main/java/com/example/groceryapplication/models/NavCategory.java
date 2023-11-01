@@ -1,11 +1,14 @@
 package com.example.groceryapplication.models;
 
-public class NavCategory {
+import java.io.Serializable;
+
+public class NavCategory implements Serializable {
     private String product_img_url;
     private String productName;
     private String productPrice;
     private String totalQuantity;
     private String totalPrice;
+    private String docummentId;
 
     private String currentDate;
     private String currentTime;
@@ -20,6 +23,14 @@ public class NavCategory {
         this.totalPrice = totalPrice;
         this.currentDate = currentDate;
         this.currentTime = currentTime;
+    }
+
+    public String getDocummentId() {
+        return docummentId;
+    }
+
+    public void setDocummentId(String docummentId) {
+        this.docummentId = docummentId;
     }
 
     public String getProduct_img_url() {
