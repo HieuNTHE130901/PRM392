@@ -32,11 +32,12 @@ Project đã có:
 
 – Map screen: show Store’s location
 
+– Show a notification if Cart has products when opening the application
+
 Còn thiếu: 
 
 – Billing screen: process payment of user
 
-– Show a notification if Cart has products when opening the application
 
 – Chat screen: customers can chat with Store
 
