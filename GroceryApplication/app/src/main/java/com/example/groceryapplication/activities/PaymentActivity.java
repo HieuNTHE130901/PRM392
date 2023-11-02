@@ -10,58 +10,68 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.models.Voucher;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-    public class PaymentActivity extends AppCompatActivity {
-        FirebaseFirestore firestore;
-        FirebaseAuth auth;
-        TextView txtName;
-        TextView txtSubtotal;
-        TextView txtDiscount;
-        TextView paymentAddress;
-        TextView txtShipping;
-        TextView txtFinalPrice;
-        EditText paymentAddressNew;
-        EditText edtVoucher;
-        CheckBox addressCheckbox;
-        Button payButton;
-        Button applyVoucher;
-        List<Voucher> voucherList;
+public class PaymentActivity extends AppCompatActivity {
+    FirebaseFirestore firestore;
+    FirebaseAuth auth;
+    TextView txtName;
+    TextView txtSubtotal;
+    TextView txtDiscount;
+    TextView paymentAddress;
+    TextView txtShipping;
+    TextView txtFinalPrice;
+    EditText paymentAddressNew;
+    EditText edtVoucher;
+    CheckBox addressCheckbox;
+    Button payButton;
+    Button applyVoucher;
+    List<Voucher> voucherList;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_payment);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_payment);
 
-            // Initialize Firebase components
-            firestore = FirebaseFirestore.getInstance();
-            auth = FirebaseAuth.getInstance();
+        // Initialize Firebase components
+        firestore = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
-            // Initialize UI components
-            txtName = findViewById(R.id.payment_userName);
-            txtSubtotal = findViewById(R.id.payment_subtotal);
-            txtDiscount = findViewById(R.id.payment_discount);
-            paymentAddress = findViewById(R.id.payment_address);
-            txtShipping = findViewById(R.id.payment_shipping);
-            txtFinalPrice = findViewById(R.id.payment_finalPrice);
-            paymentAddressNew = findViewById(R.id.payment_address_new);
-            edtVoucher = findViewById(R.id.payment_edt_voucher);
-            addressCheckbox = findViewById(R.id.address_checkbox);
-            payButton = findViewById(R.id.payment_pay_btn);
-            applyVoucher = findViewById(R.id.payment_bnt_voucher);
-            voucherList = new ArrayList<>();
+        // Initialize UI components
+        txtName = findViewById(R.id.payment_userName);
+        txtSubtotal = findViewById(R.id.payment_subtotal);
+        txtDiscount = findViewById(R.id.payment_discount);
+        paymentAddress = findViewById(R.id.payment_address);
+        txtShipping = findViewById(R.id.payment_shipping);
+        txtFinalPrice = findViewById(R.id.payment_finalPrice);
+        paymentAddressNew = findViewById(R.id.payment_address_new);
+        edtVoucher = findViewById(R.id.payment_edt_voucher);
+        addressCheckbox = findViewById(R.id.address_checkbox);
+        payButton = findViewById(R.id.payment_pay_btn);
+        applyVoucher = findViewById(R.id.payment_bnt_voucher);
+        voucherList = new ArrayList<>();
         //Handle check button
         addressCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -80,7 +90,7 @@ import java.util.Map;
 
         // Set values to the TextViews
 
-        // Set "user name" and "address" from FirestoreDB
+        // Get "user name" and "address" from FirestoreDB
         String userId = auth.getCurrentUser().getUid();
         // Reference to the user's "information" document in the "information" subcollection
         DocumentReference informationRef = firestore.collection("users")
@@ -157,7 +167,6 @@ import java.util.Map;
                     }
                 });
 
-
         //handle button "apply voucher"
         applyVoucher.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,30 +181,75 @@ import java.util.Map;
                         break; // Stop searching once the voucher is found
                     }
                 }
-
-                // Calculate the final price
-                double subtotal = Double.parseDouble(txtSubtotal.getText().toString().replace(",", ".")); // Replace commas with periods
-                double shipping = Double.parseDouble(txtShipping.getText().toString().replace(",", ".")); // Replace commas with periods
-                double finalPrice = (subtotal - (subtotal * discount / 100)) + shipping;
-
-                // Update the "Discount" TextView
-                txtDiscount.setText(discount + "%");
-
-                // Update the "Final Price" TextView
-                txtFinalPrice.setText("Final Price: " + String.format("%.2f", finalPrice));
+                updateFinalPrice();
             }
         });
 
-
+        // Handle pay button
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                // Get the selected address (existing or new)
+                String selectedAddress;
+                if (addressCheckbox.isChecked()) {
+                    selectedAddress = paymentAddress.getText().toString();
+                } else {
+                    selectedAddress = paymentAddressNew.getText().toString();
+                }
+
+                // Get the final price
+                String finalPrice = txtFinalPrice.getText().toString();
+                // get date and time
+                String saveCurrentDate, saveCurrentTime;
+                Calendar calForDate = Calendar.getInstance();
+                SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+                saveCurrentDate = currentDate.format(calForDate.getTime());
+                SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
+                saveCurrentTime = currentTime.format(calForDate.getTime());
+
+                // Create a new document to store payment information
+                Map<String, Object> paymentInfo = new HashMap<>();
+                paymentInfo.put("ship_address", selectedAddress);
+                paymentInfo.put("final_price", finalPrice);
+                paymentInfo.put("time", saveCurrentDate + " " + saveCurrentTime);
+                paymentInfo.put("status", "Created");
+
+
+                // Reference to the "payment" subcollection under the user's document
+                firestore.collection("users").document(userId).collection("payment").document().set(paymentInfo)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // Payment information saved successfully
+                                // Clear the cart by deleting the cart data in Firestore (assuming you have a 'cart' collection)
+                                firestore.collection("users").document(userId).collection("cart")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        document.getReference().delete();
+                                                    }
+                                                    Toast.makeText(PaymentActivity.this, "Payment successful, check your order!", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(PaymentActivity.this, "Failed to clear the cart!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Handle the error if the payment information couldn't be saved
+                                Toast.makeText(PaymentActivity.this, "Payment failed, try again!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
-
-
-        }
+    }
 
     private void updateFinalPrice() {
         String selectedVoucher = edtVoucher.getText().toString();
@@ -218,7 +272,7 @@ import java.util.Map;
         txtDiscount.setText(discount + "%");
 
         // Update the "Final Price" TextView
-        txtFinalPrice.setText("Final Price: " + String.format("%.2f", finalPrice));
+        txtFinalPrice.setText(String.format("%.2f", finalPrice));
     }
 
 }

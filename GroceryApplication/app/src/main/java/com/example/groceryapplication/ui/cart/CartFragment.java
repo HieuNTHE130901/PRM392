@@ -50,7 +50,7 @@ public class CartFragment extends Fragment {
         txtTotalAmount = root.findViewById(R.id.cart_total_price);
         buy = root.findViewById(R.id.buy_now);
 
-        db.collection("users").document(auth.getCurrentUser().getUid()).collection("AddToCart").get()
+        db.collection("users").document(auth.getCurrentUser().getUid()).collection("cart").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

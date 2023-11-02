@@ -26,8 +26,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     private Context context;
     private List<Cart> list;
-    private CartFragment cartFragment; // Reference to the CartFragment
-    double totalPrice = 0;
+    private CartFragment cartFragment;
     FirebaseFirestore firestore;
     FirebaseAuth auth;
 
@@ -59,7 +58,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firestore.collection("users").document(auth.getCurrentUser().getUid()).collection("AddToCart").document(list.get(position).getDocummentId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                firestore.collection("users").document(auth.getCurrentUser().getUid()).collection("cart").document(list.get(position).getDocummentId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {

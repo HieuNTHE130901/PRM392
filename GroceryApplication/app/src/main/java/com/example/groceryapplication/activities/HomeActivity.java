@@ -78,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
         // Check if the cart has products
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        db.collection("users").document(auth.getCurrentUser().getUid()).collection("AddToCart").get()
+        db.collection("users").document(auth.getCurrentUser().getUid()).collection("cart").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

@@ -143,20 +143,36 @@
             app:layout_constraintTop_toBottomOf="@+id/payment_subtotal" />
 
         <TextView
-            android:id="@+id/payment_finalPrice"
+            android:id="@+id/textvieww"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
-            android:text="Final price: $$$"
+            android:text="Final price: "
             android:textAlignment="center"
             android:textColor="#FF3030"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintHorizontal_bias="0.323"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/payment_finalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:text="$$$"
+            android:textAlignment="center"
+            android:textColor="#FF3030"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textvieww" />
 
         <CheckBox
             android:id="@+id/address_checkbox"
