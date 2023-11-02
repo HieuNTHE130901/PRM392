@@ -1,14 +1,21 @@
 package com.example.groceryapplication.activities;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.example.groceryapplication.common.Service;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -31,7 +38,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Service service = new Service();
+
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
     FirebaseFirestore db;
@@ -86,11 +93,11 @@ public class HomeActivity extends AppCompatActivity {
                             if (categoryList.isEmpty()) {
                                 // The cart is empty
                                 //Toast.makeText(HomeActivity.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
-                                service.showNotification("Your cart is empty", "Go buy some product now!");
+                                showNotification("Your cart is empty", "Go buy some product now!");
                             } else {
                                 // The cart has products
                                 //Toast.makeText(HomeActivity.this, "Your cart has "+categoryList.size()+" items", Toast.LENGTH_SHORT).show();
-                                service.showNotification("Your cart have some items", "Go buy it now!");
+                                showNotification("Your cart have some items", "Go buy it now!");
                             }
                         }
                     }
@@ -127,6 +134,35 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private static final int NOTIFICATION_ID = 1;
+
+    public void showNotification(String title, String message) {
+        // Create a notification channel for Android 8.0 and above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("app_channel", "App Channel", NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+        // Create a notification with a custom layout
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "app_channel")
+                .setSmallIcon(R.drawable.ic_grocery)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setWhen(0)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(message))
+                .setAutoCancel(true);
+        //.setContentIntent(pendingIntent); // Set the PendingIntent for the notification
+
+        // Show the notification with a fixed notification ID
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
 }

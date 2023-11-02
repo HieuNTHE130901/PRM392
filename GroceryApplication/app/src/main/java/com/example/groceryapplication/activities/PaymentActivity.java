@@ -19,7 +19,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         double totalAmount = getIntent().getDoubleExtra("totalAmount", 0.0);
         // Find the TextView in the layout
-        TextView totalAmountTextView = findViewById(R.id.totalAmountTextView);
+        TextView totalAmountTextView = findViewById(R.id.payment_sub_total);
 
         // Set the totalAmount to the TextView
         totalAmountTextView.setText("Total Amount: " + totalAmount);
@@ -30,7 +30,7 @@ public class PaymentActivity extends AppCompatActivity {
         TextView discount = findViewById(R.id.payment_discount);
         TextView shipping = findViewById(R.id.payment_shipping);
         TextView finalPrice = findViewById(R.id.payment_finalPrice);
-        TextView addressTextView = findViewById(R.id.payment_address);
+        //TextView addressTextView = findViewById(R.id.pay);
 
         // Set the totalAmount to the TextView
         subtotal.setText(totalAmountString);

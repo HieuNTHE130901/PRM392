@@ -40,23 +40,35 @@ Project đã làm:
 
 – Show a notification if Cart has products when opening the application
 
-
-Còn thiếu: 
-
 – Billing screen: process payment of user
 
 
+Còn thiếu: 
+
+
+
+
+Hiếu: 
+
+– Billing screen: process payment of user
 – Chat screen: customers can chat with Store
 
 
-Hiếu: – Sign Up – List of Products – Product details – Product Cart – Map screen – Billing screen – Show a notification
+Hùng: 
+– Show a notification if Cart has products when opening the application
+– Map screen: show Store’s location
 
 
-Hùng:
+Nghĩa: 
+– Sign Up/Login screen: manage users
 
-Nghĩa:
 
-Cường:
+Cường: 
+- Product Cart screen: show products that user selects to buy 
 
-Huy:
+
+
+Huy: 
+- List of Products screen: show list of products
+- Product details screen: show information of a product
 
