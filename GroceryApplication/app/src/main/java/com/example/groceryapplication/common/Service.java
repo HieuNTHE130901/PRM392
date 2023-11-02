@@ -1,6 +1,7 @@
 package com.example.groceryapplication.common;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.pm.PackageManager;
@@ -13,10 +14,10 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.groceryapplication.R;
 
-public class Services extends AppCompatActivity {
+public class Service extends AppCompatActivity {
     private static final int NOTIFICATION_ID = 1;
-    void showNotification(String title, String message) {
-
+    @SuppressLint("MissingPermission")
+    public void showNotification(String title, String message) {
 
         // Create a notification channel for Android 8.0 and above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -21,8 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity {
-
-
     private EditText nameEditText;
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -41,11 +39,10 @@ public class RegistrationActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase=FirebaseDatabase.getInstance();
 
-
         // Initialize views
-        progressBar = findViewById(R.id.progress_bar); // Initialize the ProgressBar
+        // Initialize the ProgressBar
+        progressBar = findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
-
         nameEditText = findViewById(R.id.name);
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
@@ -60,8 +57,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 registerUser();
             }
         });
-
-
 
         signinLink.setOnClickListener(new View.OnClickListener() {
             @Override
