@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.models.Cart;
+import com.example.groceryapplication.ui.cart.CartFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,15 +23,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+
     private Context context;
     private List<Cart> list;
-    double totalPrice=0;
+    private CartFragment cartFragment; // Reference to the CartFragment
+    double totalPrice = 0;
     FirebaseFirestore firestore;
     FirebaseAuth auth;
 
-    public CategoryAdapter(Context context, List<Cart> list) {
+    public CategoryAdapter(Context context, List<Cart> list, CartFragment cartFragment) {
         this.context = context;
         this.list = list;
+        this.cartFragment = cartFragment; // Initialize the CartFragment reference
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
     }
@@ -38,7 +42,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @NonNull
     @Override
     public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_cart_item,parent,false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_cart_item, parent, false));
     }
 
     @Override
@@ -55,26 +59,25 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firestore.collection("CurrentUser").document(auth.getCurrentUser().getUid()).collection("AddToCart").document(list.get(position).getDocummentId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                firestore.collection("users").document(auth.getCurrentUser().getUid()).collection("AddToCart").document(list.get(position).getDocummentId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             list.remove(list.get(position));
                             notifyDataSetChanged();
+
+                            // Update the total price by calling a method in the CartFragment
+                            cartFragment.updateTotalPrice(); // Call the method in the CartFragment
+
                             Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
-
-
-                        }else{
+                        } else {
                             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
         });
-
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -84,7 +87,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView img, deleteItem;
-        TextView name,price,totalprice,quantity,date,time;
+        TextView name, price, totalprice, quantity, date, time;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             img = itemView.findViewById(R.id.nav_cat_img);

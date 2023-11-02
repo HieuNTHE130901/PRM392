@@ -45,6 +45,7 @@ public class HomeFragment extends Fragment {
         vegetableList = new ArrayList<>();
         itemAdapter1 = new ItemAdapter(getActivity(), vegetableList);
         vegetableRecycle.setAdapter(itemAdapter1);
+
         db.collection("vegetable")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

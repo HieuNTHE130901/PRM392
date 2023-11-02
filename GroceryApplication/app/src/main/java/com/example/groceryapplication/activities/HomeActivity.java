@@ -25,6 +25,7 @@ import com.example.groceryapplication.R;
 import com.example.groceryapplication.adapter.CategoryAdapter;
 import com.example.groceryapplication.models.Cart;
 import com.example.groceryapplication.databinding.ActivityHomeBinding;
+import com.example.groceryapplication.ui.cart.CartFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -41,6 +42,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
+    private CartFragment cartFragment;
+
     FirebaseFirestore db;
     FirebaseAuth auth;
     List<Cart> categoryList;
@@ -69,17 +72,18 @@ public class HomeActivity extends AppCompatActivity {
 
         // Initialize categoryList and navCategoryAdapter
         categoryList = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(this, categoryList);
+        categoryAdapter = new CategoryAdapter(this, categoryList, cartFragment);
+
 
         // Check if the cart has products
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        db.collection("CurrentUser").document(auth.getCurrentUser().getUid()).collection("AddToCart").get()
+        db.collection("users").document(auth.getCurrentUser().getUid()).collection("AddToCart").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            categoryList.clear(); // Clear the list before adding items
+                           // categoryList.clear(); // Clear the list before adding items
                             for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
                                 String docummentId = documentSnapshot.getId();
                                 Cart cart = documentSnapshot.toObject(Cart.class);
@@ -87,16 +91,11 @@ public class HomeActivity extends AppCompatActivity {
                                 categoryList.add(cart);
                             }
                             categoryAdapter.notifyDataSetChanged();
-
                             // Calculate the total and check if the cart has products
-
                             if (categoryList.isEmpty()) {
                                 // The cart is empty
-                                //Toast.makeText(HomeActivity.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
                                 showNotification("Your cart is empty", "Go buy some product now!");
                             } else {
-                                // The cart has products
-                                //Toast.makeText(HomeActivity.this, "Your cart has "+categoryList.size()+" items", Toast.LENGTH_SHORT).show();
                                 showNotification("Your cart have some items", "Go buy it now!");
                             }
                         }

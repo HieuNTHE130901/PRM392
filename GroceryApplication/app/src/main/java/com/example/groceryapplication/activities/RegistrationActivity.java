@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,20 +14,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.groceryapplication.R;
-import com.example.groceryapplication.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
     private EditText nameEditText;
+    private EditText phoneEditText;
     private EditText emailEditText;
+    private EditText addressEditText;
     private EditText passwordEditText;
     private Button signupButton;
     private TextView signinLink;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
     private FirebaseDatabase firebaseDatabase;
     private ProgressBar progressBar;
 
@@ -36,7 +45,7 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         // Initialize Firebase Authentication
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         firebaseDatabase=FirebaseDatabase.getInstance();
 
         // Initialize views
@@ -46,6 +55,9 @@ public class RegistrationActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.name);
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
+        addressEditText = findViewById(R.id.address);
+        phoneEditText = findViewById(R.id.phone);
+
         signupButton = findViewById(R.id.signup_button);
         signinLink = findViewById(R.id.signin_link);
 
@@ -73,19 +85,19 @@ public class RegistrationActivity extends AppCompatActivity {
         String name = nameEditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
+        String address = addressEditText.getText().toString().trim();
+        String phone = phoneEditText.getText().toString().trim();
 
-        mAuth.createUserWithEmailAndPassword(email, password)
+
+        auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Registration success
                             Toast.makeText(RegistrationActivity.this, "Registration success.", Toast.LENGTH_SHORT).show();
-                            // You can perform additional actions here (e.g., navigate to the home screen)
-                            User model = new User(name, email, password);
-                            String id = task.getResult().getUser().getUid();
-                            firebaseDatabase.getReference().child("Users").child(id).setValue(model);
-
+                            // Now, let's save user data to Firestore
+                            saveUserDataToFirestore(name, email, address, phone);
                             goToSignInActivity();
                         } else {
                             // Registration failed
@@ -95,6 +107,38 @@ public class RegistrationActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void saveUserDataToFirestore(String name, String email, String address, String phone) {
+        // Get the currently authenticated user
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            // Create a Firestore instance
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            // Create a user data object
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("name", name);
+            userData.put("email", email);
+            userData.put("address", address);
+            userData.put("phone", phone);
+
+
+            // Add the user data to Firestore using the user's UID as the document ID
+            String userId = user.getUid();
+            db.collection("users")
+                    .document(userId)
+                    .collection("information")
+                    .document("information") // Use the user's UID as the document ID
+                    .set(userData)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("RegistrationActivity", "User data added to Firestore successfully");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("RegistrationActivity", "Error adding user data to Firestore", e);
+                    });
+        }
+    }
+
     private void goToSignInActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

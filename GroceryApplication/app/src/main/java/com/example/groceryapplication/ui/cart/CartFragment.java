@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartFragment extends Fragment {
-    TextView totalAmount;
+    TextView txtTotalAmount;
     RecyclerView recyclerView;
     Button buy;
     List<Cart> categoryList;
@@ -45,41 +45,42 @@ public class CartFragment extends Fragment {
         recyclerView = root.findViewById(R.id.cart_rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         categoryList = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(getActivity(), categoryList);
+        categoryAdapter = new CategoryAdapter(getActivity(), categoryList, this); // Pass a reference to the CartFragment
         recyclerView.setAdapter(categoryAdapter);
-        totalAmount = root.findViewById(R.id.cart_total_price);
+        txtTotalAmount = root.findViewById(R.id.cart_total_price);
         buy = root.findViewById(R.id.buy_now);
 
-        db.collection("CurrentUser").document(auth.getCurrentUser().getUid()).collection("AddToCart").get()
+        db.collection("users").document(auth.getCurrentUser().getUid()).collection("AddToCart").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             categoryList.clear(); // Clear the list before adding items
                             for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
-                                String docummentId = documentSnapshot.getId();
+                                String documentId = documentSnapshot.getId();
                                 Cart cart = documentSnapshot.toObject(Cart.class);
-                                cart.setDocummentId(docummentId);
+                                cart.setDocummentId(documentId);
                                 categoryList.add(cart);
                                 categoryAdapter.notifyDataSetChanged();
                             }
 
                             // Calculate the total and check if the cart has products
-                            double totalAmount = calculateTotal(categoryList);
+                            calculateTotal(categoryList);
                             if (categoryList.isEmpty()) {
                                 // The cart is empty
                                 Toast.makeText(getContext(), "Your cart is empty", Toast.LENGTH_SHORT).show();
                                 // Disable the "buy" button
                                 buy.setEnabled(false);
+                                updateTotalPrice();
                             } else {
                                 // The cart has products
                                 // You can enable the "buy" button or take any other action
                                 buy.setEnabled(true);
+                                updateTotalPrice();
                             }
                         }
                     }
                 });
-
 
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,19 +95,20 @@ public class CartFragment extends Fragment {
         return root;
     }
 
+    public void updateTotalPrice() {
+        // Calculate and update the total price
+        double totalAmount = calculateTotal(categoryList);
+        // Set the formatted total to the TextView
+        txtTotalAmount.setText(String.format("%.2f", totalAmount));
+    }
+
     private double calculateTotal(List<Cart> categoryList) {
-        double totalAmountt = 0.0;
+        double totalAmount = 0.0;
         for (Cart model : categoryList) {
             double totalPrice = Double.parseDouble(model.getTotalPrice());
-            totalAmountt += totalPrice;
+            totalAmount += totalPrice;
         }
 
-        // Format the totalAmountt value to display up to two decimal places
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        String formattedTotal = decimalFormat.format(totalAmountt);
-
-        // Set the formatted total to the TextView
-        totalAmount.setText(formattedTotal);
-        return totalAmountt;
+        return totalAmount;
     }
 }
