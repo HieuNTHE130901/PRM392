@@ -36,6 +36,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
+    private static final int NOTIFICATION_ID = 1;
     private ActivityHomeBinding binding;
     FirebaseFirestore db;
     FirebaseAuth auth;
@@ -88,10 +89,12 @@ public class HomeActivity extends AppCompatActivity {
 
                             if (categoryList.isEmpty()) {
                                 // The cart is empty
-                                Toast.makeText(HomeActivity.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(HomeActivity.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
+                                showNotification("Your cart is empty", "Go buy some product now!");
                             } else {
                                 // The cart has products
-                                Toast.makeText(HomeActivity.this, "Your cart has "+categoryList.size()+" items", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(HomeActivity.this, "Your cart has "+categoryList.size()+" items", Toast.LENGTH_SHORT).show();
+                                showNotification("Your cart have some items", "Go buy it now!");
                             }
                         }
                     }
@@ -128,6 +131,43 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void showNotification(String title,String message) {
+
+
+        // Create a notification channel for Android 8.0 and above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("app_channel", "App Channel", NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Create a notification with a custom layout
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "app_channel")
+                .setSmallIcon(R.drawable.ic_grocery)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setWhen(0)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(message))
+                .setAutoCancel(true);
+        //.setContentIntent(pendingIntent); // Set the PendingIntent for the notification
+
+        // Show the notification with a fixed notification ID
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
 
