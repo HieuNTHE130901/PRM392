@@ -14,12 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.groceryapplication.R;
-import com.example.groceryapplication.adapter.NavCategoryAdapter;
+import com.example.groceryapplication.adapter.CategoryAdapter;
 import com.example.groceryapplication.activities.PaymentActivity;
-import com.example.groceryapplication.models.NavCategory;
+import com.example.groceryapplication.models.Cart;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,8 +31,8 @@ public class CartFragment extends Fragment {
     TextView totalAmount;
     RecyclerView recyclerView;
     Button buy;
-    List<NavCategory> categoryList;
-    NavCategoryAdapter navCategoryAdapter;
+    List<Cart> categoryList;
+    CategoryAdapter categoryAdapter;
     FirebaseFirestore db;
     FirebaseAuth auth;
 
@@ -46,8 +45,8 @@ public class CartFragment extends Fragment {
         recyclerView = root.findViewById(R.id.cart_rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         categoryList = new ArrayList<>();
-        navCategoryAdapter = new NavCategoryAdapter(getActivity(), categoryList);
-        recyclerView.setAdapter(navCategoryAdapter);
+        categoryAdapter = new CategoryAdapter(getActivity(), categoryList);
+        recyclerView.setAdapter(categoryAdapter);
         totalAmount = root.findViewById(R.id.cart_total_price);
         buy = root.findViewById(R.id.buy_now);
 
@@ -59,10 +58,10 @@ public class CartFragment extends Fragment {
                             categoryList.clear(); // Clear the list before adding items
                             for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
                                 String docummentId = documentSnapshot.getId();
-                                NavCategory cart = documentSnapshot.toObject(NavCategory.class);
+                                Cart cart = documentSnapshot.toObject(Cart.class);
                                 cart.setDocummentId(docummentId);
                                 categoryList.add(cart);
-                                navCategoryAdapter.notifyDataSetChanged();
+                                categoryAdapter.notifyDataSetChanged();
                             }
 
                             // Calculate the total and check if the cart has products
@@ -96,9 +95,9 @@ public class CartFragment extends Fragment {
         return root;
     }
 
-    private double calculateTotal(List<NavCategory> categoryList) {
+    private double calculateTotal(List<Cart> categoryList) {
         double totalAmountt = 0.0;
-        for (NavCategory model : categoryList) {
+        for (Cart model : categoryList) {
             double totalPrice = Double.parseDouble(model.getTotalPrice());
             totalAmountt += totalPrice;
         }

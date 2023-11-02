@@ -1,7 +1,6 @@
 package com.example.groceryapplication.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.groceryapplication.R;
-import com.example.groceryapplication.models.NavCategory;
+import com.example.groceryapplication.models.Cart;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,14 +21,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
-public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.ViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private Context context;
-    private List<NavCategory> list;
+    private List<Cart> list;
     double totalPrice=0;
     FirebaseFirestore firestore;
     FirebaseAuth auth;
 
-    public NavCategoryAdapter(Context context, List<NavCategory> list) {
+    public CategoryAdapter(Context context, List<Cart> list) {
         this.context = context;
         this.list = list;
         firestore = FirebaseFirestore.getInstance();
@@ -39,12 +37,12 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
 
     @NonNull
     @Override
-    public NavCategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_cart_item,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NavCategoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
         Glide.with(context).load(list.get(position).getProduct_img_url()).into(holder.img);
         holder.name.setText(list.get(position).getProductName());
         holder.price.setText(list.get(position).getProductPrice());

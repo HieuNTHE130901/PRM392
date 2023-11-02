@@ -36,17 +36,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class DetailActivity extends AppCompatActivity {
-
     private static final int NOTIFICATION_ID = 1;
     TextView quantity;
-
-
     int totalQuantity = 1;
     double totalPrice = 0;
     ImageView img, add, remove;
     TextView name, description, price;
     Button addToCart;
-
     FirebaseFirestore firestore;
     FirebaseAuth auth;
 

@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,14 +20,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.example.groceryapplication.R;
-import com.example.groceryapplication.adapter.NavCategoryAdapter;
-import com.example.groceryapplication.models.NavCategory;
-import com.example.groceryapplication.ui.cart.CartFragment;
+import com.example.groceryapplication.adapter.CategoryAdapter;
+import com.example.groceryapplication.models.Cart;
 import com.example.groceryapplication.databinding.ActivityHomeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,8 +39,8 @@ public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     FirebaseFirestore db;
     FirebaseAuth auth;
-    List<NavCategory> categoryList;
-    NavCategoryAdapter navCategoryAdapter;
+    List<Cart> categoryList;
+    CategoryAdapter categoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Initialize categoryList and navCategoryAdapter
         categoryList = new ArrayList<>();
-        navCategoryAdapter = new NavCategoryAdapter(this, categoryList);
+        categoryAdapter = new CategoryAdapter(this, categoryList);
 
         // Check if the cart has products
         db = FirebaseFirestore.getInstance();
@@ -81,11 +78,11 @@ public class HomeActivity extends AppCompatActivity {
                             categoryList.clear(); // Clear the list before adding items
                             for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
                                 String docummentId = documentSnapshot.getId();
-                                NavCategory cart = documentSnapshot.toObject(NavCategory.class);
+                                Cart cart = documentSnapshot.toObject(Cart.class);
                                 cart.setDocummentId(docummentId);
                                 categoryList.add(cart);
                             }
-                            navCategoryAdapter.notifyDataSetChanged();
+                            categoryAdapter.notifyDataSetChanged();
 
                             // Calculate the total and check if the cart has products
 

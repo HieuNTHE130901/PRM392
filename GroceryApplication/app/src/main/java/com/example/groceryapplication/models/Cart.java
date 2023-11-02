@@ -2,7 +2,7 @@ package com.example.groceryapplication.models;
 
 import java.io.Serializable;
 
-public class NavCategory implements Serializable {
+public class Cart implements Serializable {
     private String product_img_url;
     private String productName;
     private String productPrice;
@@ -12,10 +12,10 @@ public class NavCategory implements Serializable {
 
     private String currentDate;
     private String currentTime;
-    public NavCategory() {
+    public Cart() {
     }
 
-    public NavCategory(String product_img_url, String productName, String productPrice, String totalQuantity, String totalPrice, String currentDate, String currentTime) {
+    public Cart(String product_img_url, String productName, String productPrice, String totalQuantity, String totalPrice, String currentDate, String currentTime) {
         this.product_img_url = product_img_url;
         this.productName = productName;
         this.productPrice = productPrice;

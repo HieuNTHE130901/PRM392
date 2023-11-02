@@ -61,6 +61,11 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:22.2.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.makeramen:roundedimageview:2.3.0")
+<<<<<<< Updated upstream
+=======
+    implementation("com.google.android.libraries.places:places:3.2.0")
+    // implementation("com.paypal.checkout:android-sdk:1.0.0")
+>>>>>>> Stashed changes
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -39,7 +39,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         Glide.with(context).load(itemList.get(position).getImg_url()).into(holder.itemImage);
         holder.name.setText(itemList.get(position).getName());
         holder.description.setText(itemList.get(position).getDescription());
-        holder.price.setText("Price: "+itemList.get(position).getPrice()+" $/kg");
+        holder.price.setText("Price: "+itemList.get(position).getPrice()+" vnd/kg");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
