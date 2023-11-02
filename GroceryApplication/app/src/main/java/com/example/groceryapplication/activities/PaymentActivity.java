@@ -19,21 +19,21 @@ public class PaymentActivity extends AppCompatActivity {
 
         double totalAmount = getIntent().getDoubleExtra("totalAmount", 0.0);
         // Find the TextView in the layout
-        TextView totalAmountTextView = findViewById(R.id.payment_sub_total);
+       // TextView totalAmountTextView = findViewById(R.id.payment_sub_total);
 
         // Set the totalAmount to the TextView
-        totalAmountTextView.setText("Total Amount: " + totalAmount);
+      //  totalAmountTextView.setText("Total Amount: " + totalAmount);
 
         String totalAmountString = String.valueOf(totalAmount);
         // Find the TextView in the layout
-        TextView subtotal = findViewById(R.id.payment_sub_total);
-        TextView discount = findViewById(R.id.payment_discount);
-        TextView shipping = findViewById(R.id.payment_shipping);
-        TextView finalPrice = findViewById(R.id.payment_finalPrice);
+       // TextView subtotal = findViewById(R.id.payment_sub_total);
+    //    TextView discount = findViewById(R.id.payment_discount);
+     //   TextView shipping = findViewById(R.id.payment_shipping);
+     //   TextView finalPrice = findViewById(R.id.payment_finalPrice);
         //TextView addressTextView = findViewById(R.id.pay);
 
         // Set the totalAmount to the TextView
-        subtotal.setText(totalAmountString);
+       // subtotal.setText(totalAmountString);
 
         Button buy = findViewById(R.id.pay_btn);
         buy.setOnClickListener(new View.OnClickListener() {
