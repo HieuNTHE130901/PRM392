@@ -62,8 +62,6 @@ public class DetailActivity extends AppCompatActivity {
         if (object instanceof Item) {
             item = (Item) object;
         }
-
-
         img = findViewById(R.id.item_detail_image);
         add = findViewById(R.id.add_item);
         remove = findViewById(R.id.remove_item);
@@ -95,7 +93,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-
         if (item != null) {
             Glide.with(getApplicationContext()).load(item.getImg_url()).into(img);
             name.setText(item.getName());
@@ -104,16 +101,13 @@ public class DetailActivity extends AppCompatActivity {
             updateTotalPrice();
 
         }
-
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addedToCart();
             }
         });
-
     }
-
     private void addedToCart() {
         String saveCurrentDate, saveCurrentTime;
         Calendar calForDate = Calendar.getInstance();
@@ -129,7 +123,6 @@ public class DetailActivity extends AppCompatActivity {
         cartMap.put("currentTime", saveCurrentTime);
         cartMap.put("totalQuantity", quantity.getText().toString());
         cartMap.put("totalPrice", String.valueOf(totalPrice));
-
         firestore.collection("CurrentUser").document(auth.getCurrentUser().getUid()).collection("AddToCart").add(cartMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {

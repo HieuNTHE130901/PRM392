@@ -85,7 +85,6 @@ public class CartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 double totalAmount = calculateTotal(categoryList);
-
                 Intent intent = new Intent(getContext(), PaymentActivity.class);
                 intent.putExtra("totalAmount", totalAmount);
                 startActivity(intent);
