@@ -1,5 +1,6 @@
 package com.example.groceryapplication.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +16,9 @@ import com.bumptech.glide.Glide;
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.models.Cart;
 import com.example.groceryapplication.ui.cart.CartFragment;
+import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -27,15 +27,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private Context context;
     private List<Cart> list;
     private CartFragment cartFragment;
-    FirebaseFirestore firestore;
-    FirebaseAuth auth;
+
 
     public CategoryAdapter(Context context, List<Cart> list, CartFragment cartFragment) {
         this.context = context;
         this.list = list;
         this.cartFragment = cartFragment; // Initialize the CartFragment reference
-        firestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
+
     }
 
     @NonNull
@@ -45,7 +43,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Glide.with(context).load(list.get(position).getProduct_img_url()).into(holder.img);
         holder.name.setText(list.get(position).getProductName());
         holder.price.setText(list.get(position).getProductPrice());
@@ -58,7 +56,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firestore.collection("users").document(auth.getCurrentUser().getUid()).collection("cart").document(list.get(position).getDocummentId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                FirebaseUtil.userCartCollection().document(list.get(position).getDocummentId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {

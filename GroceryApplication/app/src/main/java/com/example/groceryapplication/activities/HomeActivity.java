@@ -26,6 +26,7 @@ import com.example.groceryapplication.adapter.CategoryAdapter;
 import com.example.groceryapplication.models.Cart;
 import com.example.groceryapplication.databinding.ActivityHomeBinding;
 import com.example.groceryapplication.ui.cart.CartFragment;
+import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -76,9 +77,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         // Check if the cart has products
-        db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-        db.collection("users").document(auth.getCurrentUser().getUid()).collection("cart").get()
+        FirebaseUtil.userCartCollection().get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -120,7 +119,7 @@ public class HomeActivity extends AppCompatActivity {
             navController.navigate(R.id.nav_cart);
             return true;
         } else if (itemId == R.id.action_home) {
-            Intent homeIntent = new Intent(this, HomeActivity.class);
+            Intent homeIntent = new Intent(this, ChatActivity.class);
             startActivity(homeIntent);
             return true;
         } else {

@@ -14,13 +14,12 @@ import android.widget.Toast;
 
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.models.Voucher;
+import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -91,14 +90,8 @@ public class PaymentActivity extends AppCompatActivity {
         // Set values to the TextViews
 
         // Get "user name" and "address" from FirestoreDB
-        String userId = auth.getCurrentUser().getUid();
-        // Reference to the user's "information" document in the "information" subcollection
-        DocumentReference informationRef = firestore.collection("users")
-                .document(userId)
-                .collection("information")
-                .document("information");
-        // Retrieve the user's "information" document
-        informationRef.get().addOnCompleteListener(task -> {
+          // Retrieve the user's "information" document
+        FirebaseUtil.currentUserInfoDocument().get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
@@ -143,7 +136,7 @@ public class PaymentActivity extends AppCompatActivity {
 
 
         // Load voucher from FirestoreDB
-        firestore.collection("system_setting").document("voucher")
+        FirebaseUtil.systemVoucherDocument()
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -171,16 +164,6 @@ public class PaymentActivity extends AppCompatActivity {
         applyVoucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedVoucher = edtVoucher.getText().toString();
-                int discount = 0;
-
-                // Search for the selected voucher in the voucher list
-                for (Voucher voucher : voucherList) {
-                    if (voucher.getName().equals(selectedVoucher)) {
-                        discount = voucher.getDiscount();
-                        break; // Stop searching once the voucher is found
-                    }
-                }
                 updateFinalPrice();
             }
         });
@@ -217,13 +200,13 @@ public class PaymentActivity extends AppCompatActivity {
 
 
                 // Reference to the "payment" subcollection under the user's document
-                firestore.collection("users").document(userId).collection("payment").document().set(paymentInfo)
+                FirebaseUtil.userPaymentCollection().document().set(paymentInfo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 // Payment information saved successfully
                                 // Clear the cart by deleting the cart data in Firestore (assuming you have a 'cart' collection)
-                                firestore.collection("users").document(userId).collection("cart")
+                                FirebaseUtil.userCartCollection()
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
@@ -257,8 +240,8 @@ public class PaymentActivity extends AppCompatActivity {
 
         // Search for the selected voucher in the voucher list
         for (Voucher voucher : voucherList) {
-            if (voucher.getName().equals(selectedVoucher)) {
-                discount = voucher.getDiscount();
+            if (voucher.getCode().equals(selectedVoucher)) {
+                discount = voucher.getValue();
                 break; // Stop searching once the voucher is found
             }
         }

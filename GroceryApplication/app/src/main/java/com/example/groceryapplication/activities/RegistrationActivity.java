@@ -14,15 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.groceryapplication.R;
+import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +32,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button signupButton;
     private TextView signinLink;
     private FirebaseAuth auth;
-    private FirebaseDatabase firebaseDatabase;
     private ProgressBar progressBar;
 
     @Override
@@ -46,7 +41,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // Initialize Firebase Authentication
         auth = FirebaseAuth.getInstance();
-        firebaseDatabase=FirebaseDatabase.getInstance();
 
         // Initialize views
         // Initialize the ProgressBar
@@ -88,7 +82,6 @@ public class RegistrationActivity extends AppCompatActivity {
         String address = addressEditText.getText().toString().trim();
         String phone = phoneEditText.getText().toString().trim();
 
-
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -109,11 +102,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void saveUserDataToFirestore(String name, String email, String address, String phone) {
-        // Get the currently authenticated user
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-            // Create a Firestore instance
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             // Create a user data object
             Map<String, Object> userData = new HashMap<>();
@@ -122,13 +110,8 @@ public class RegistrationActivity extends AppCompatActivity {
             userData.put("address", address);
             userData.put("phone", phone);
 
-
             // Add the user data to Firestore using the user's UID as the document ID
-            String userId = user.getUid();
-            db.collection("users")
-                    .document(userId)
-                    .collection("information")
-                    .document("information") // Use the user's UID as the document ID
+            FirebaseUtil.currentUserInfoDocument()
                     .set(userData)
                     .addOnSuccessListener(aVoid -> {
                         Log.d("RegistrationActivity", "User data added to Firestore successfully");
@@ -136,7 +119,6 @@ public class RegistrationActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> {
                         Log.w("RegistrationActivity", "Error adding user data to Firestore", e);
                     });
-        }
     }
 
     private void goToSignInActivity() {

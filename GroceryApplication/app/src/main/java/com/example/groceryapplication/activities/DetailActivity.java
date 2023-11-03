@@ -12,7 +12,6 @@ import androidx.navigation.Navigation;
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -26,15 +25,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.groceryapplication.MainActivity;
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.databinding.ActivityHomeBinding;
 import com.example.groceryapplication.models.Item;
+import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -49,9 +46,6 @@ public class DetailActivity extends AppCompatActivity {
     ImageView img, add, remove;
     TextView name, description, price;
     Button addToCart;
-    FirebaseFirestore firestore;
-    FirebaseAuth auth;
-
     Item item = null;
 
 
@@ -63,9 +57,6 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        firestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
 
         final Object object = getIntent().getSerializableExtra("detail");
         if (object instanceof Item) {
@@ -124,6 +115,7 @@ public class DetailActivity extends AppCompatActivity {
         saveCurrentDate = currentDate.format(calForDate.getTime());
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
         saveCurrentTime = currentTime.format(calForDate.getTime());
+
         final HashMap<String, Object> cartMap = new HashMap<>();
         cartMap.put("productImg", item.getImg_url());
         cartMap.put("productName", item.getName());
@@ -132,17 +124,24 @@ public class DetailActivity extends AppCompatActivity {
         cartMap.put("currentTime", saveCurrentTime);
         cartMap.put("totalQuantity", quantity.getText().toString());
         cartMap.put("totalPrice", String.valueOf(totalPrice));
-        firestore.collection("users").document(auth.getCurrentUser().getUid()).collection("cart").add(cartMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                Toast.makeText(DetailActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
-                showNotification("You have new item in your cart!");
-                finish();
-            }
-        });
 
-
+        // Get the reference to the user's cart collection
+        FirebaseUtil.userCartCollection().add(cartMap)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(DetailActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
+                            showNotification("You have a new item in your cart!");
+                            finish();
+                        } else {
+                            // Handle the error if the cart item could not be added.
+                            Toast.makeText(DetailActivity.this, "Failed to add to cart", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
+
 
     private void showNotification(String message) {
 
