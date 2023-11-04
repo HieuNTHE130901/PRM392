@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.groceryapplication.R;
-import com.example.groceryapplication.databinding.ActivityHomeBinding;
 import com.example.groceryapplication.models.Item;
 import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,15 +38,13 @@ import java.util.HashMap;
 
 public class DetailActivity extends AppCompatActivity {
     private static final int NOTIFICATION_ID = 1;
-    private ActivityHomeBinding binding;
-    TextView quantity;
-    int totalQuantity = 1;
-    double totalPrice = 0;
-    ImageView img, add, remove;
-    TextView name, description, price;
-    Button addToCart;
-    Item item = null;
-
+    private TextView quantity;
+    private int totalQuantity = 1;
+    private double totalPrice = 0;
+    private ImageView img, add, remove;
+    private TextView name, description, price;
+    private Button addToCart;
+    private Item item = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +53,6 @@ public class DetailActivity extends AppCompatActivity {
         // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         final Object object = getIntent().getSerializableExtra("detail");
         if (object instanceof Item) {
@@ -85,7 +81,7 @@ public class DetailActivity extends AppCompatActivity {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (totalQuantity > 00) {
+                if (totalQuantity > 1) {
                     totalQuantity--;
                     quantity.setText(String.valueOf(totalQuantity));
                     updateTotalPrice();
@@ -97,10 +93,10 @@ public class DetailActivity extends AppCompatActivity {
             Glide.with(getApplicationContext()).load(item.getImg_url()).into(img);
             name.setText(item.getName());
             description.setText(item.getDescription());
-            price.setText(item.getPrice());
+            price.setText(String.valueOf(item.getPrice()));
             updateTotalPrice();
-
         }
+
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +104,13 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
     }
+
     private void addedToCart() {
+        if (item == null) {
+            Toast.makeText(this, "Item details are missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String saveCurrentDate, saveCurrentTime;
         Calendar calForDate = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -117,13 +119,13 @@ public class DetailActivity extends AppCompatActivity {
         saveCurrentTime = currentTime.format(calForDate.getTime());
 
         final HashMap<String, Object> cartMap = new HashMap<>();
-        cartMap.put("productImg", item.getImg_url());
+        cartMap.put("product_img_url", item.getImg_url());
         cartMap.put("productName", item.getName());
-        cartMap.put("productPrice", price.getText().toString());
+        cartMap.put("productPrice", item.getPrice());
         cartMap.put("currentDate", saveCurrentDate);
         cartMap.put("currentTime", saveCurrentTime);
-        cartMap.put("totalQuantity", quantity.getText().toString());
-        cartMap.put("totalPrice", String.valueOf(totalPrice));
+        cartMap.put("totalQuantity", totalQuantity);
+        cartMap.put("totalPrice", totalPrice);
 
         // Get the reference to the user's cart collection
         FirebaseUtil.userCartCollection().add(cartMap)
@@ -142,9 +144,7 @@ public class DetailActivity extends AppCompatActivity {
                 });
     }
 
-
     private void showNotification(String message) {
-
         // Create a notification channel for Android 8.0 and above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("app_channel", "App Channel", NotificationManager.IMPORTANCE_HIGH);
@@ -158,27 +158,26 @@ public class DetailActivity extends AppCompatActivity {
                 .setContentTitle("Added new products to cart")
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setWhen(0)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(message))
                 .setAutoCancel(true);
-                //.setContentIntent(pendingIntent); // Set the PendingIntent for the notification
 
         // Show the notification with a fixed notification ID
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-
             return;
         }
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
     private void updateTotalPrice() {
-        totalPrice = Double.parseDouble(item.getPrice()) * totalQuantity;
+        if (item != null) {
+            totalPrice = item.getPrice() * totalQuantity;
+        }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_cart, menu);
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
@@ -191,10 +190,6 @@ public class DetailActivity extends AppCompatActivity {
             // Open CartFragment
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
             navController.navigate(R.id.nav_cart);
-            return true;
-        } else if (itemId == R.id.action_home) {
-            Intent homeIntent = new Intent(this, HomeActivity.class);
-            startActivity(homeIntent);
             return true;
         } else {
             return super.onOptionsItemSelected(item);

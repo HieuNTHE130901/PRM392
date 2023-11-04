@@ -78,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -89,7 +88,6 @@ public class LoginActivity extends AppCompatActivity {
                             // Login success
                             Toast.makeText(LoginActivity.this, "Login success.", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            // You can perform additional actions here (e.g., navigate to the home screen)
                             goToHomeActivity();
                         } else {
                             // Login failed

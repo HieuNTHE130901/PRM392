@@ -18,18 +18,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsFragment extends Fragment {
-    private GoogleMap mMap;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
+
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            mMap = googleMap;
             LatLng fpt = new LatLng(21.01326111138678, 105.52658803823091);
-            mMap.addMarker(new MarkerOptions().position(fpt).title("Đại học FPT"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(fpt));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fpt, 15));
-            mMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.addMarker(new MarkerOptions().position(fpt).title("Đại học FPT"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(fpt));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fpt, 15));
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
         }
     };
 

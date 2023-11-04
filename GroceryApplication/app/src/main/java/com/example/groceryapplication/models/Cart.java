@@ -5,17 +5,16 @@ import java.io.Serializable;
 public class Cart implements Serializable {
     private String product_img_url;
     private String productName;
-    private String productPrice;
-    private String totalQuantity;
-    private String totalPrice;
+    private double productPrice;
+    private int totalQuantity;
+    private double totalPrice;
     private String docummentId;
-
     private String currentDate;
     private String currentTime;
     public Cart() {
     }
 
-    public Cart(String product_img_url, String productName, String productPrice, String totalQuantity, String totalPrice, String currentDate, String currentTime) {
+    public Cart(String product_img_url, String productName, double productPrice, int totalQuantity, double totalPrice, String currentDate, String currentTime) {
         this.product_img_url = product_img_url;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -23,14 +22,6 @@ public class Cart implements Serializable {
         this.totalPrice = totalPrice;
         this.currentDate = currentDate;
         this.currentTime = currentTime;
-    }
-
-    public String getDocummentId() {
-        return docummentId;
-    }
-
-    public void setDocummentId(String docummentId) {
-        this.docummentId = docummentId;
     }
 
     public String getProduct_img_url() {
@@ -49,28 +40,36 @@ public class Cart implements Serializable {
         this.productName = productName;
     }
 
-    public String getProductPrice() {
+    public double getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(String productPrice) {
+    public void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
     }
 
-    public String getTotalQuantity() {
+    public int getTotalQuantity() {
         return totalQuantity;
     }
 
-    public void setTotalQuantity(String totalQuantity) {
+    public void setTotalQuantity(int totalQuantity) {
         this.totalQuantity = totalQuantity;
     }
 
-    public String getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getDocummentId() {
+        return docummentId;
+    }
+
+    public void setDocummentId(String docummentId) {
+        this.docummentId = docummentId;
     }
 
     public String getCurrentDate() {

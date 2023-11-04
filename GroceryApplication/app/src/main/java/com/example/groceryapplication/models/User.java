@@ -5,6 +5,7 @@ public class User {
     String email;
     String address;
     String phone;
+    String userUID;
 
     public User() {
     }
@@ -14,6 +15,14 @@ public class User {
         this.email = email;
         this.address = address;
         this.phone = phone;
+    }
+
+    public String getUserUID() {
+        return userUID;
+    }
+
+    public void setUserUID(String userUID) {
+        this.userUID = userUID;
     }
 
     public String getName() {

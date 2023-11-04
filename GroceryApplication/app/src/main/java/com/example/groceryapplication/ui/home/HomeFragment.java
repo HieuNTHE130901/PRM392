@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.adapter.ItemAdapter;
 import com.example.groceryapplication.models.Item;
+import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,49 +28,32 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     List<Item> fruitList;
     List<Item> vegetableList;
     RecyclerView fruitRecycle;
     RecyclerView vegetableRecycle;
 
-    ItemAdapter itemAdapter1;
-    ItemAdapter itemAdapter2;
+    ItemAdapter vegetableAdapter;
+    ItemAdapter fruitAdapter;
 
+    ProgressBar progressBar;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        // Initialize the ProgressBar
+        progressBar = root.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
 
-        vegetableRecycle = root.findViewById(R.id.rec_vegetable);
-        vegetableRecycle.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
-        vegetableList = new ArrayList<>();
-        itemAdapter1 = new ItemAdapter(getActivity(), vegetableList);
-        vegetableRecycle.setAdapter(itemAdapter1);
-
-        db.collection("vegetable")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Item item = document.toObject(Item.class);
-                                vegetableList.add(item);
-                                itemAdapter1.notifyDataSetChanged();
-                            }
-                        } else {
-                            Toast.makeText(getActivity(),"Error "+ task.getException(), Toast.LENGTH_SHORT);
-                        }
-                    }
-                });
-
+        // Load fruit data
         fruitRecycle = root.findViewById(R.id.rec_fruit);
         fruitRecycle.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
         fruitList = new ArrayList<>();
-        itemAdapter2 = new ItemAdapter(getActivity(), fruitList);
-        fruitRecycle.setAdapter(itemAdapter2);
-        db.collection("fruit")
+        fruitAdapter = new ItemAdapter(getActivity(), fruitList);
+        fruitRecycle.setAdapter(fruitAdapter);
+
+        // Retrieve fruit data from Firestore using FirebaseUtil
+        FirebaseUtil.fruitCollection()
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -77,19 +62,39 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Item item = document.toObject(Item.class);
                                 fruitList.add(item);
-                                itemAdapter2.notifyDataSetChanged();
+                                fruitAdapter.notifyDataSetChanged();
                             }
                         } else {
-                            Toast.makeText(getActivity(),"Error "+ task.getException(), Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Error " + task.getException(), Toast.LENGTH_SHORT);
                         }
                     }
                 });
 
+        // Load vegetable data
+        vegetableRecycle = root.findViewById(R.id.rec_vegetable);
+        vegetableRecycle.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
+        vegetableList = new ArrayList<>();
+        vegetableAdapter = new ItemAdapter(getActivity(), vegetableList);
+        vegetableRecycle.setAdapter(vegetableAdapter);
 
-
+        // Retrieve vegetable data from Firestore using FirebaseUtil
+        FirebaseUtil.vegetableCollection()
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Item item = document.toObject(Item.class);
+                                vegetableList.add(item);
+                                vegetableAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), "Error " + task.getException(), Toast.LENGTH_SHORT);
+                        }
+                    }
+                });
 
         return root;
     }
-
-
 }

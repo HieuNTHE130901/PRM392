@@ -5,37 +5,44 @@ import com.google.firebase.Timestamp;
 import java.util.List;
 
 public class ChatRoom {
-    String chatroomId;
-    List<String> userIds;
+    private String roomId; // Unique identifier for the chat room
+    private List<String> participants; // List of user IDs participating in the chat room
+
     Timestamp lastMessageTimestamp;
-    String lastMessageSenderId;
+    String lastSenderId;
     String lastMessage;
+
+    public ChatRoom(String roomId, List<String> participants, Timestamp lastMessageTimestamp, String lastSenderId, String lastMessage) {
+        this.roomId = roomId;
+        this.participants = participants;
+        this.lastMessageTimestamp = lastMessageTimestamp;
+        this.lastSenderId = lastSenderId;
+        this.lastMessage = lastMessage;
+    }
+    public ChatRoom(String chatroomId, List<String> userIds, Timestamp lastMessageTimestamp, String lastMessageSenderId) {
+        this.roomId = chatroomId;
+        this.participants = userIds;
+        this.lastMessageTimestamp = lastMessageTimestamp;
+        this.lastSenderId = lastMessageSenderId;
+    }
 
     public ChatRoom() {
     }
 
-    public ChatRoom(String chatroomId, List<String> userIds, Timestamp lastMessageTimestamp, String lastMessageSenderId, String lastMessage) {
-        this.chatroomId = chatroomId;
-        this.userIds = userIds;
-        this.lastMessageTimestamp = lastMessageTimestamp;
-        this.lastMessageSenderId = lastMessageSenderId;
-        this.lastMessage = lastMessage;
+    public String getRoomId() {
+        return roomId;
     }
 
-    public String getChatroomId() {
-        return chatroomId;
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 
-    public void setChatroomId(String chatroomId) {
-        this.chatroomId = chatroomId;
+    public List<String> getParticipants() {
+        return participants;
     }
 
-    public List<String> getUserIds() {
-        return userIds;
-    }
-
-    public void setUserIds(List<String> userIds) {
-        this.userIds = userIds;
+    public void setParticipants(List<String> participants) {
+        this.participants = participants;
     }
 
     public Timestamp getLastMessageTimestamp() {
@@ -46,12 +53,12 @@ public class ChatRoom {
         this.lastMessageTimestamp = lastMessageTimestamp;
     }
 
-    public String getLastMessageSenderId() {
-        return lastMessageSenderId;
+    public String getLastSenderId() {
+        return lastSenderId;
     }
 
-    public void setLastMessageSenderId(String lastMessageSenderId) {
-        this.lastMessageSenderId = lastMessageSenderId;
+    public void setLastSenderId(String lastSenderId) {
+        this.lastSenderId = lastSenderId;
     }
 
     public String getLastMessage() {

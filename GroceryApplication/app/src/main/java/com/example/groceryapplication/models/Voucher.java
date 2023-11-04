@@ -2,9 +2,9 @@ package com.example.groceryapplication.models;
 
 public class Voucher {
     private String code;
-    private int value;
+    private double value;
 
-    public Voucher(String code, int value) {
+    public Voucher(String code, double value) {
         this.code = code;
         this.value = value;
     }
@@ -14,7 +14,7 @@ public class Voucher {
         return code;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 }

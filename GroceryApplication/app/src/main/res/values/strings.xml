@@ -26,4 +26,5 @@
     <string name="menu_map">Store location</string>
     <string name="menu_mapp">Store location</string>
     <string name="menu_cart">My Cart</string>
+    <string name="log_out">Log out</string>
 </resources>

@@ -45,8 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private CartFragment cartFragment;
 
-    FirebaseFirestore db;
-    FirebaseAuth auth;
+
     List<Cart> categoryList;
     CategoryAdapter categoryAdapter;
 
@@ -74,7 +73,6 @@ public class HomeActivity extends AppCompatActivity {
         // Initialize categoryList and navCategoryAdapter
         categoryList = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(this, categoryList, cartFragment);
-
 
         // Check if the cart has products
         FirebaseUtil.userCartCollection().get()
@@ -109,17 +107,19 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-
         if (itemId == R.id.action_cart) {
             // Open CartFragment
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
             navController.navigate(R.id.nav_cart);
             return true;
         } else if (itemId == R.id.action_home) {
-            Intent homeIntent = new Intent(this, ChatActivity.class);
+            Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
             return true;
         } else {

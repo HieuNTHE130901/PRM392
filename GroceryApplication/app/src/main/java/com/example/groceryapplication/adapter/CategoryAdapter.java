@@ -16,10 +16,13 @@ import com.bumptech.glide.Glide;
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.models.Cart;
 import com.example.groceryapplication.ui.cart.CartFragment;
+import com.example.groceryapplication.utils.AndroidUtil;
 import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.protobuf.StringValue;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
@@ -28,12 +31,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private List<Cart> list;
     private CartFragment cartFragment;
 
-
     public CategoryAdapter(Context context, List<Cart> list, CartFragment cartFragment) {
         this.context = context;
         this.list = list;
         this.cartFragment = cartFragment; // Initialize the CartFragment reference
-
     }
 
     @NonNull
@@ -44,23 +45,29 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Glide.with(context).load(list.get(position).getProduct_img_url()).into(holder.img);
-        holder.name.setText(list.get(position).getProductName());
-        holder.price.setText(list.get(position).getProductPrice());
-        double totalPrice = Double.parseDouble(list.get(position).getTotalPrice());
-        String roundedTotalPrice = String.format("%.2f", totalPrice);
-        holder.totalprice.setText(roundedTotalPrice);
-        holder.quantity.setText(list.get(position).getTotalQuantity());
-        holder.date.setText(list.get(position).getCurrentDate());
-        holder.time.setText(list.get(position).getCurrentTime());
+        Cart cartItem = list.get(position);
+
+        Glide.with(context).load(cartItem.getProduct_img_url()).into(holder.img);
+        holder.name.setText(cartItem.getProductName());
+
+        // Parse total price and quantity
+        double totalPrice = cartItem.getTotalPrice();
+        int totalQuantity = cartItem.getTotalQuantity();
+        double productPrice = cartItem.getProductPrice();
+        holder.price.setText(AndroidUtil.formatPrice(productPrice));
+        holder.totalprice.setText(AndroidUtil.formatPrice(totalPrice));
+        holder.quantity.setText(String.valueOf(totalQuantity));
+        holder.date.setText(cartItem.getCurrentDate());
+        holder.time.setText(cartItem.getCurrentTime());
+
         holder.deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseUtil.userCartCollection().document(list.get(position).getDocummentId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                FirebaseUtil.userCartCollection().document(cartItem.getDocummentId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            list.remove(list.get(position));
+                            list.remove(cartItem);
                             notifyDataSetChanged();
 
                             // Update the total price by calling a method in the CartFragment
@@ -98,4 +105,5 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             deleteItem = itemView.findViewById(R.id.delete);
         }
     }
+
 }

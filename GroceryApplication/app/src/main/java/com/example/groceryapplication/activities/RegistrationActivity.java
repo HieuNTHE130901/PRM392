@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -102,24 +104,27 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void saveUserDataToFirestore(String name, String email, String address, String phone) {
+        String userID = FirebaseUtil.currentUserId();
+        // Create a user data object
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("name", name);
+        userData.put("email", email);
+        userData.put("address", address);
+        userData.put("phone", phone);
+        userData.put("uid", userID);
 
-            // Create a user data object
-            Map<String, Object> userData = new HashMap<>();
-            userData.put("name", name);
-            userData.put("email", email);
-            userData.put("address", address);
-            userData.put("phone", phone);
+        // Reference to the "users" collection
+        FirebaseUtil.currentUserInfoDocument()
+                .set(userData)
+                .addOnSuccessListener(aVoid2 -> {
+                    Log.d("RegistrationActivity", "User data added to Firestore successfully");
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("RegistrationActivity", "Error adding user data to Firestore", e);
+                });
 
-            // Add the user data to Firestore using the user's UID as the document ID
-            FirebaseUtil.currentUserInfoDocument()
-                    .set(userData)
-                    .addOnSuccessListener(aVoid -> {
-                        Log.d("RegistrationActivity", "User data added to Firestore successfully");
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.w("RegistrationActivity", "Error adding user data to Firestore", e);
-                    });
     }
+
 
     private void goToSignInActivity() {
         Intent intent = new Intent(this, LoginActivity.class);

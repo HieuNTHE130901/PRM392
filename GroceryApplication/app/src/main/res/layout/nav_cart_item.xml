@@ -16,8 +16,9 @@
 
         <ImageView
             android:id="@+id/nav_cat_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:src="@drawable/ic_home"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:scaleType="centerCrop" />
 
         <LinearLayout
@@ -34,7 +35,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Product Name: "
+                    android:text="Name: "
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -56,9 +57,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date: "
+                    android:text="Added date: "
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -67,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:text="Date"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -78,9 +79,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Time: "
+                    android:text="Added time: "
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -89,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:text="Time"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -102,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:text="Price: "
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -111,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:text="Price"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -124,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:text="Quantity: "
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -133,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:text="Quantity"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -145,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total Price: "
-                    android:textColor="@android:color/black"
+                    android:textColor="#F63131"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -154,7 +155,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="total price"
-                    android:textColor="@android:color/black"
+                    android:textColor="#F63131"
                     android:textSize="16sp" />
 
 
@@ -166,7 +167,7 @@
         <ImageView
             android:id="@+id/delete"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:baselineAligned="false"
             android:src="@drawable/ic_delete" />
 

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.models.Voucher;
+import com.example.groceryapplication.utils.AndroidUtil;
 import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,9 +35,9 @@ import java.util.Map;
 
 
 public class PaymentActivity extends AppCompatActivity {
-    FirebaseFirestore firestore;
-    FirebaseAuth auth;
+    double subtotal, shipping, finalprice, discount;
     TextView txtName;
+    TextView txtAddress;
     TextView txtSubtotal;
     TextView txtDiscount;
     TextView paymentAddress;
@@ -54,10 +55,6 @@ public class PaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-        // Initialize Firebase components
-        firestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-
         // Initialize UI components
         txtName = findViewById(R.id.payment_userName);
         txtSubtotal = findViewById(R.id.payment_subtotal);
@@ -71,7 +68,30 @@ public class PaymentActivity extends AppCompatActivity {
         payButton = findViewById(R.id.payment_pay_btn);
         applyVoucher = findViewById(R.id.payment_bnt_voucher);
         voucherList = new ArrayList<>();
-        //Handle check button
+
+
+
+        // Set values to the TextViews
+
+        // Get "user name" and "address" from FirestoreDB
+        // Retrieve the user's information
+        FirebaseUtil.currentUserInfoDocument().get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // Get the name field from the document
+                    String userName = document.getString("name");
+                    String address = document.getString("address");
+                    if (userName != null) {
+                        txtName.setText("Your name: " + userName);
+                        txtAddress = findViewById(R.id.payment_address);
+                        txtAddress.setText(address);
+                    }
+                }
+            }
+        });
+
+        //Handle check address button
         addressCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -87,34 +107,15 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
 
-        // Set values to the TextViews
 
-        // Get "user name" and "address" from FirestoreDB
-          // Retrieve the user's "information" document
-        FirebaseUtil.currentUserInfoDocument().get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    // Get the name field from the document
-                    String userName = document.getString("name");
-                    String address = document.getString("address");
-                    if (userName != null) {
-                        txtName.setText("Your name: " + userName);
-                        TextView txtAddress = findViewById(R.id.payment_address);
-                        txtAddress.setText(address);
-                    }
-                }
-            }
-        });
 
 
         // Set value to "Subtotal" get data from Cart
-        double subtotal = getIntent().getDoubleExtra("totalAmount", 0.0);
-        String subtotalString = String.format("%.2f", subtotal);
-        txtSubtotal.setText(subtotalString);
+        subtotal = getIntent().getDoubleExtra("totalAmount", 0.0);
+        txtSubtotal.setText(AndroidUtil.formatPrice(subtotal));
 
         //Set value to "shipping fee" load from FirestoreDB
-        firestore.collection("system_setting").document("fee").get().
+        FirebaseUtil.systemFeeDocument().get().
                 addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -124,8 +125,8 @@ public class PaymentActivity extends AppCompatActivity {
                                 // Get the shipping fee
                                 Long shippingFee = document.getLong("shipping");
                                 if (shippingFee != null) {
-                                    double shipping = shippingFee.doubleValue();
-                                    txtShipping.setText(String.valueOf(shipping));
+                                    shipping = shippingFee.doubleValue();
+                                    txtShipping.setText(AndroidUtil.formatPrice(shipping));
                                     // Call the method to calculate and update the final price
                                     updateFinalPrice();
                                 }
@@ -134,8 +135,6 @@ public class PaymentActivity extends AppCompatActivity {
                     }
                 });
 
-
-        // Load voucher from FirestoreDB
         FirebaseUtil.systemVoucherDocument()
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -150,12 +149,15 @@ public class PaymentActivity extends AppCompatActivity {
                                     // Iterate through the voucher data map and add vouchers to the list
                                     for (Map.Entry<String, Object> entry : voucherData.entrySet()) {
                                         String name = entry.getKey();
-                                        int discount = Integer.parseInt(entry.getValue().toString());
+                                        discount = Double.parseDouble(entry.getValue().toString());
                                         Voucher voucher = new Voucher(name, discount);
                                         voucherList.add(voucher);
                                     }
                                 }
                             }
+                        } else {
+                            // Handle the case where voucher data couldn't be loaded
+                            Toast.makeText(PaymentActivity.this, "Failed to load voucher data!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -182,7 +184,8 @@ public class PaymentActivity extends AppCompatActivity {
                 }
 
                 // Get the final price
-                String finalPrice = txtFinalPrice.getText().toString();
+                double finalPrice = Double.parseDouble(txtFinalPrice.getText().toString().replaceAll("[^0-9]", ""));
+
                 // get date and time
                 String saveCurrentDate, saveCurrentTime;
                 Calendar calForDate = Calendar.getInstance();
@@ -205,7 +208,7 @@ public class PaymentActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 // Payment information saved successfully
-                                // Clear the cart by deleting the cart data in Firestore (assuming you have a 'cart' collection)
+                                // Clear the cart by deleting the cart data in Firestore
                                 FirebaseUtil.userCartCollection()
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -215,7 +218,7 @@ public class PaymentActivity extends AppCompatActivity {
                                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                                         document.getReference().delete();
                                                     }
-                                                    Toast.makeText(PaymentActivity.this, "Payment successful, check your order!", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(PaymentActivity.this, "Order successful, check your order!", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Toast.makeText(PaymentActivity.this, "Failed to clear the cart!", Toast.LENGTH_SHORT).show();
                                                 }
@@ -227,16 +230,15 @@ public class PaymentActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // Handle the error if the payment information couldn't be saved
-                                Toast.makeText(PaymentActivity.this, "Payment failed, try again!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PaymentActivity.this, "Order failed, try again!", Toast.LENGTH_SHORT).show();
                             }
                         });
             }
         });
     }
-
     private void updateFinalPrice() {
         String selectedVoucher = edtVoucher.getText().toString();
-        int discount = 0;
+        double discount = 0;
 
         // Search for the selected voucher in the voucher list
         for (Voucher voucher : voucherList) {
@@ -247,15 +249,14 @@ public class PaymentActivity extends AppCompatActivity {
         }
 
         // Calculate the final price
-        double subtotal = Double.parseDouble(txtSubtotal.getText().toString().replace(",", "."));
-        double shipping = Double.parseDouble(txtShipping.getText().toString().replace(",", "."));
-        double finalPrice = (subtotal - (subtotal * discount / 100)) + shipping;
+        subtotal = Double.parseDouble(txtSubtotal.getText().toString().replaceAll("[^0-9]", ""));
+        shipping = Double.parseDouble(txtShipping.getText().toString().replaceAll("[^0-9]", ""));
+        finalprice = (subtotal - (subtotal * discount / 100)) + shipping;
 
         // Update the "Discount" TextView
-        txtDiscount.setText(discount + "%");
+        txtDiscount.setText(discount+ "%");
 
         // Update the "Final Price" TextView
-        txtFinalPrice.setText(String.format("%.2f", finalPrice));
+        txtFinalPrice.setText(AndroidUtil.formatPrice(finalprice));
     }
-
 }
