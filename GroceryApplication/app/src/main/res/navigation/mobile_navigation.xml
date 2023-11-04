@@ -32,6 +32,11 @@
         android:label="@string/menu_map"
         tools:layout="@layout/fragment_maps" />
     <fragment
+        android:id="@+id/nav_order"
+        android:name="com.example.groceryapplication.ui.order.OrderFragment"
+        android:label="@string/menu_order"
+        tools:layout="@layout/fragment_order"/>
+    <fragment
         android:id="@+id/nav_log_out"
         android:name="com.example.groceryapplication.ui.logout.LogoutFragment"
         android:label="Logout" />

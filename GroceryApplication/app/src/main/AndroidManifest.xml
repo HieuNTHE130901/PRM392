@@ -35,10 +35,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBWSE9Pfe31rdekUC438LTLtWAL2VWyJQo" />
-
-        <activity
-            android:name=".activities.ChatActivity"
-            android:exported="false" />
         <activity
             android:name=".activities.DetailActivity"
             android:exported="false" />

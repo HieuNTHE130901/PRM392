@@ -5,20 +5,13 @@ import com.google.firebase.Timestamp;
 import java.util.List;
 
 public class ChatRoom {
-    private String roomId; // Unique identifier for the chat room
-    private List<String> participants; // List of user IDs participating in the chat room
+    private String roomId;
+    private List<String> participants;
 
     Timestamp lastMessageTimestamp;
     String lastSenderId;
     String lastMessage;
 
-    public ChatRoom(String roomId, List<String> participants, Timestamp lastMessageTimestamp, String lastSenderId, String lastMessage) {
-        this.roomId = roomId;
-        this.participants = participants;
-        this.lastMessageTimestamp = lastMessageTimestamp;
-        this.lastSenderId = lastSenderId;
-        this.lastMessage = lastMessage;
-    }
     public ChatRoom(String chatroomId, List<String> userIds, Timestamp lastMessageTimestamp, String lastMessageSenderId) {
         this.roomId = chatroomId;
         this.participants = userIds;

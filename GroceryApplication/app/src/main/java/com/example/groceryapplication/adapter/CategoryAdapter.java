@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +21,6 @@ import com.example.groceryapplication.utils.AndroidUtil;
 import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.protobuf.StringValue;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -34,31 +34,98 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public CategoryAdapter(Context context, List<Cart> list, CartFragment cartFragment) {
         this.context = context;
         this.list = list;
-        this.cartFragment = cartFragment; // Initialize the CartFragment reference
+        this.cartFragment = cartFragment;
     }
 
     @NonNull
     @Override
     public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_cart_item, parent, false));
+
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cart, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Cart cartItem = list.get(position);
+    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
 
+        Cart cartItem = list.get(position);
         Glide.with(context).load(cartItem.getProduct_img_url()).into(holder.img);
         holder.name.setText(cartItem.getProductName());
 
         // Parse total price and quantity
         double totalPrice = cartItem.getTotalPrice();
-        int totalQuantity = cartItem.getTotalQuantity();
+        double totalQuantity = cartItem.getTotalQuantity();
         double productPrice = cartItem.getProductPrice();
         holder.price.setText(AndroidUtil.formatPrice(productPrice));
         holder.totalprice.setText(AndroidUtil.formatPrice(totalPrice));
-        holder.quantity.setText(String.valueOf(totalQuantity));
-        holder.date.setText(cartItem.getCurrentDate());
-        holder.time.setText(cartItem.getCurrentTime());
+        DecimalFormat quantityFormat = new DecimalFormat("##.#");
+        String formattedQuantity = quantityFormat.format(cartItem.getTotalQuantity());
+        holder.quantity.setText(formattedQuantity);
+
+
+        holder.add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Increment the total quantity and update the UI
+                cartItem.setTotalQuantity(cartItem.getTotalQuantity() + 0.1);
+                DecimalFormat quantityFormat = new DecimalFormat("##.#");
+                String formattedQuantity = quantityFormat.format(cartItem.getTotalQuantity());
+                holder.quantity.setText(formattedQuantity);
+
+                // Update the total price and UI
+                double totalPrice = cartItem.getTotalQuantity() * cartItem.getProductPrice();
+                cartItem.setTotalPrice(totalPrice);
+                holder.totalprice.setText(AndroidUtil.formatPrice(totalPrice));
+
+                // Update the cart item in Firestore or your data source here
+                FirebaseUtil.updateCartItem(cartItem);
+
+                // Update the total price in CartFragment
+                cartFragment.updateTotalPrice();
+
+            }
+        });
+        holder.remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cartItem.getTotalQuantity() > 0.1) {
+                    // Decrement the total quantity and update the UI
+                    cartItem.setTotalQuantity(cartItem.getTotalQuantity() - 0.1);
+                    DecimalFormat quantityFormat = new DecimalFormat("##.#");
+                    String formattedQuantity = quantityFormat.format(cartItem.getTotalQuantity());
+                    holder.quantity.setText(formattedQuantity);
+
+                    // Update the total price and UI
+                    double totalPrice = cartItem.getTotalQuantity() * cartItem.getProductPrice();
+                    cartItem.setTotalPrice(totalPrice);
+                    holder.totalprice.setText(AndroidUtil.formatPrice(totalPrice));
+
+                    // Update the cart item in Firestore or your data source here
+                    FirebaseUtil.updateCartItem(cartItem);
+
+                    // Update the total price in CartFragment
+                    cartFragment.updateTotalPrice();
+                } else {
+                    // If the total quantity is 1, consider deleting the item
+                    FirebaseUtil.userCartCollection().document(cartItem.getDocummentId())
+                            .delete()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        list.remove(cartItem);
+                                        notifyDataSetChanged();
+                                        // Update the total price by calling a method in the CartFragment
+                                        cartFragment.updateTotalPrice();
+                                        Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+            }
+        });
+
 
         holder.deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +136,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                         if (task.isSuccessful()) {
                             list.remove(cartItem);
                             notifyDataSetChanged();
-
                             // Update the total price by calling a method in the CartFragment
                             cartFragment.updateTotalPrice(); // Call the method in the CartFragment
 
@@ -81,6 +147,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 });
             }
         });
+
     }
 
     @Override
@@ -91,7 +158,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView img, deleteItem;
-        TextView name, price, totalprice, quantity, date, time;
+        TextView name, price, totalprice, quantity;
+
+        Button add, remove;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,10 +169,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             price = itemView.findViewById(R.id.nav_cat_price);
             totalprice = itemView.findViewById(R.id.nav_cat_total_price_of_product);
             quantity = itemView.findViewById(R.id.nav_cat_totalquantity);
-            date = itemView.findViewById(R.id.nav_cat_date);
-            time = itemView.findViewById(R.id.nav_cat_time);
             deleteItem = itemView.findViewById(R.id.delete);
+            add = itemView.findViewById(R.id.btn_add);
+            remove = itemView.findViewById(R.id.btn_remove);
+
         }
     }
-
 }

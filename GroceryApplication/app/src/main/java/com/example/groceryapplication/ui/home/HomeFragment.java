@@ -1,5 +1,6 @@
 package com.example.groceryapplication.ui.home;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,13 +31,25 @@ public class HomeFragment extends Fragment {
 
     List<Item> fruitList;
     List<Item> vegetableList;
+
+    List<Item> meatList;
+
+
     RecyclerView fruitRecycle;
     RecyclerView vegetableRecycle;
+
+    RecyclerView meatRec;
+
 
     ItemAdapter vegetableAdapter;
     ItemAdapter fruitAdapter;
 
+    ItemAdapter meatAdapter;
+
+
+
     ProgressBar progressBar;
+    @SuppressLint("MissingInflatedId")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -94,6 +107,32 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 });
+
+        // Load meat data
+        meatRec = root.findViewById(R.id.rec_meat);
+        meatRec.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
+        meatList = new ArrayList<>();
+        meatAdapter = new ItemAdapter(getActivity(), meatList);
+        meatRec.setAdapter(meatAdapter);
+
+        // Retrieve vegetable data from Firestore using FirebaseUtil
+        FirebaseUtil.meatCollection()
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Item item = document.toObject(Item.class);
+                                meatList.add(item);
+                                meatAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), "Error " + task.getException(), Toast.LENGTH_SHORT);
+                        }
+                    }
+                });
+
 
         return root;
     }

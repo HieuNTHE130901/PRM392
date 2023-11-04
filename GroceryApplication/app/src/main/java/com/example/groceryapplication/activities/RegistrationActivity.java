@@ -19,8 +19,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -103,6 +101,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
     }
 
+
     private void saveUserDataToFirestore(String name, String email, String address, String phone) {
         String userID = FirebaseUtil.currentUserId();
         // Create a user data object
@@ -122,10 +121,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.w("RegistrationActivity", "Error adding user data to Firestore", e);
                 });
-
     }
-
-
     private void goToSignInActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

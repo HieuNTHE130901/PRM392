@@ -28,6 +28,12 @@
             android:icon="@drawable/ic_map"
             android:title="@string/menu_map" />
         <item
+            android:id="@+id/nav_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_map"
+            android:title="@string/menu_order" />
+        <item
             android:id="@+id/nav_log_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

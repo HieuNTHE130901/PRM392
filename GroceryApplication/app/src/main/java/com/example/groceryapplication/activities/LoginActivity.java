@@ -83,7 +83,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressBar.setVisibility(View.GONE);
-
                         if (task.isSuccessful()) {
                             // Login success
                             Toast.makeText(LoginActivity.this, "Login success.", Toast.LENGTH_SHORT).show();

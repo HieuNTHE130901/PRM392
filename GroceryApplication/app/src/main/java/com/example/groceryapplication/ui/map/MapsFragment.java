@@ -21,11 +21,10 @@ public class MapsFragment extends Fragment {
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
-
         @Override
         public void onMapReady(GoogleMap googleMap) {
             LatLng fpt = new LatLng(21.01326111138678, 105.52658803823091);
-            googleMap.addMarker(new MarkerOptions().position(fpt).title("Đại học FPT"));
+            googleMap.addMarker(new MarkerOptions().position(fpt).title("Store Location"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(fpt));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fpt, 15));
             googleMap.getUiSettings().setZoomControlsEnabled(true);

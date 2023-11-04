@@ -6,7 +6,7 @@ public class Cart implements Serializable {
     private String product_img_url;
     private String productName;
     private double productPrice;
-    private int totalQuantity;
+    private double totalQuantity;
     private double totalPrice;
     private String docummentId;
     private String currentDate;
@@ -14,7 +14,7 @@ public class Cart implements Serializable {
     public Cart() {
     }
 
-    public Cart(String product_img_url, String productName, double productPrice, int totalQuantity, double totalPrice, String currentDate, String currentTime) {
+    public Cart(String product_img_url, String productName, double productPrice, double totalQuantity, double totalPrice, String currentDate, String currentTime) {
         this.product_img_url = product_img_url;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -48,11 +48,11 @@ public class Cart implements Serializable {
         this.productPrice = productPrice;
     }
 
-    public int getTotalQuantity() {
+    public double getTotalQuantity() {
         return totalQuantity;
     }
 
-    public void setTotalQuantity(int totalQuantity) {
+    public void setTotalQuantity(double totalQuantity) {
         this.totalQuantity = totalQuantity;
     }
 

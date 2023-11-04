@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -198,15 +199,15 @@ public class PaymentActivity extends AppCompatActivity {
                 Map<String, Object> paymentInfo = new HashMap<>();
                 paymentInfo.put("ship_address", selectedAddress);
                 paymentInfo.put("final_price", finalPrice);
-                paymentInfo.put("time", saveCurrentDate + " " + saveCurrentTime);
+                paymentInfo.put("date", saveCurrentDate);
+                paymentInfo.put("time", saveCurrentTime);
                 paymentInfo.put("status", "Created");
 
-
-                // Reference to the "payment" subcollection under the user's document
-                FirebaseUtil.userPaymentCollection().document().set(paymentInfo)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                // Reference to the "orders" collection
+                FirebaseUtil.userOrdersCollection().add(paymentInfo)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
-                            public void onSuccess(Void aVoid) {
+                            public void onSuccess(DocumentReference documentReference) {
                                 // Payment information saved successfully
                                 // Clear the cart by deleting the cart data in Firestore
                                 FirebaseUtil.userCartCollection()

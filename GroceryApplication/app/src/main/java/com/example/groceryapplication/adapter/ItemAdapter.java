@@ -39,6 +39,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
         Glide.with(context).load(itemList.get(position).getImg_url()).into(holder.itemImage);
         holder.name.setText(itemList.get(position).getName());
         holder.description.setText(itemList.get(position).getDescription());
