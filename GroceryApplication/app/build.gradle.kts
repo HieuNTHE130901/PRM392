@@ -58,7 +58,6 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.9.1")
     implementation("com.google.firebase:firebase-auth:22.2.0")
     implementation ("com.firebaseui:firebase-ui-firestore:8.0.2")
-
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.makeramen:roundedimageview:2.3.0")
     implementation("com.google.android.libraries.places:places:3.2.0")

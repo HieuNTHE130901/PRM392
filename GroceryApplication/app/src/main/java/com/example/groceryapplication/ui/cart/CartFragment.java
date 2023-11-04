@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.groceryapplication.R;
-import com.example.groceryapplication.adapter.CategoryAdapter;
+import com.example.groceryapplication.adapter.CartAdapter;
 import com.example.groceryapplication.activities.PaymentActivity;
 import com.example.groceryapplication.models.Cart;
 import com.example.groceryapplication.utils.AndroidUtil;
@@ -35,7 +35,7 @@ public class CartFragment extends Fragment {
     RecyclerView recyclerView;
     Button buy;
     List<Cart> cartList;
-    CategoryAdapter categoryAdapter;
+    CartAdapter cartAdapter;
     ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -48,8 +48,8 @@ public class CartFragment extends Fragment {
         recyclerView = root.findViewById(R.id.cart_rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         cartList = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(getActivity(), cartList, this); // Pass a reference to the CartFragment
-        recyclerView.setAdapter(categoryAdapter);
+        cartAdapter = new CartAdapter(getActivity(), cartList, this); // Pass a reference to the CartFragment
+        recyclerView.setAdapter(cartAdapter);
         txtTotalAmount = root.findViewById(R.id.cart_total_price);
         buy = root.findViewById(R.id.buy_now);
 
@@ -64,7 +64,7 @@ public class CartFragment extends Fragment {
                         Cart cart = documentSnapshot.toObject(Cart.class);
                         cart.setDocummentId(documentId);
                         cartList.add(cart);
-                        categoryAdapter.notifyDataSetChanged();
+                        cartAdapter.notifyDataSetChanged();
                     }
                     // Calculate the total and check if the cart has products
                     calculateTotal(cartList);

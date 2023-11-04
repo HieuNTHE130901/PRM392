@@ -22,7 +22,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.example.groceryapplication.R;
-import com.example.groceryapplication.adapter.CategoryAdapter;
+import com.example.groceryapplication.adapter.CartAdapter;
 import com.example.groceryapplication.models.Cart;
 import com.example.groceryapplication.databinding.ActivityHomeBinding;
 import com.example.groceryapplication.ui.cart.CartFragment;
@@ -30,9 +30,7 @@ import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -47,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
     List<Cart> categoryList;
-    CategoryAdapter categoryAdapter;
+    CartAdapter cartAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +70,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Initialize categoryList and navCategoryAdapter
         categoryList = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(this, categoryList, cartFragment);
+        cartAdapter = new CartAdapter(this, categoryList, cartFragment);
 
         // Check if the cart has products
         FirebaseUtil.userCartCollection().get()
@@ -87,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
                                 cart.setDocummentId(docummentId);
                                 categoryList.add(cart);
                             }
-                            categoryAdapter.notifyDataSetChanged();
+                            cartAdapter.notifyDataSetChanged();
                             // Calculate the total and check if the cart has products
                             if (categoryList.isEmpty()) {
                                 // The cart is empty

@@ -1,6 +1,5 @@
 package com.example.groceryapplication.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,13 +24,13 @@ import com.google.android.gms.tasks.Task;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     private Context context;
     private List<Cart> list;
     private CartFragment cartFragment;
 
-    public CategoryAdapter(Context context, List<Cart> list, CartFragment cartFragment) {
+    public CartAdapter(Context context, List<Cart> list, CartFragment cartFragment) {
         this.context = context;
         this.list = list;
         this.cartFragment = cartFragment;
@@ -39,21 +38,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @NonNull
     @Override
-    public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CartAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cart, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CartAdapter.ViewHolder holder, int position) {
 
         Cart cartItem = list.get(position);
+
         Glide.with(context).load(cartItem.getProduct_img_url()).into(holder.img);
         holder.name.setText(cartItem.getProductName());
 
         // Parse total price and quantity
         double totalPrice = cartItem.getTotalPrice();
-        double totalQuantity = cartItem.getTotalQuantity();
         double productPrice = cartItem.getProductPrice();
         holder.price.setText(AndroidUtil.formatPrice(productPrice));
         holder.totalprice.setText(AndroidUtil.formatPrice(totalPrice));

@@ -50,7 +50,7 @@ public class FirebaseUtil {
     // Get a reference to the current user's order collection
     public static CollectionReference userOrdersCollection() {
         return FirebaseFirestore.getInstance().collection("orders")
-                .document(currentUserId()).collection("cart");
+                .document(currentUserId()).collection("order");
     }
 
 

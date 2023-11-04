@@ -33,7 +33,7 @@
         android:id="@+id/payment_pay_btn"
         android:layout_width="171dp"
         android:layout_height="47dp"
-        android:text="Pay now"
+        android:text="Order now"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
