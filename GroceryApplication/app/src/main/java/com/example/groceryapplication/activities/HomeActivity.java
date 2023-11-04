@@ -91,7 +91,7 @@ public class HomeActivity extends AppCompatActivity {
                             // Calculate the total and check if the cart has products
                             if (categoryList.isEmpty()) {
                                 // The cart is empty
-                                showNotification("Your cart is empty", "Go buy some product now!");
+                                showNotification("Your cart is empty !!!", "Go buy some product now!");
                             } else {
                                 showNotification("Your cart have some items", "Go buy it now!");
                             }
