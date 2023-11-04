@@ -33,8 +33,6 @@ android {
     }
 
 
-
-
 }
 
 dependencies {
@@ -46,11 +44,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20") {
         because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
     }
-
-    //paypal
-    //implementation("com.paypal.checkout:android-sdk:0.112.2")
-
-
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -64,10 +57,11 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.firebase:firebase-firestore:24.9.1")
     implementation("com.google.firebase:firebase-auth:22.2.0")
+    implementation ("com.firebaseui:firebase-ui-firestore:8.0.2")
+
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.makeramen:roundedimageview:2.3.0")
-   // implementation("com.paypal.checkout:android-sdk:1.0.0")
-
+    implementation("com.google.android.libraries.places:places:3.2.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

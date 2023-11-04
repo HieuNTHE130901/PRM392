@@ -1,17 +1,28 @@
 package com.example.groceryapplication.models;
 
 public class User {
-    private String name;
-    private String email;
-    private String password;
+    String name;
+    String email;
+    String address;
+    String phone;
+    String userUID;
 
     public User() {
     }
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String address, String phone) {
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.address = address;
+        this.phone = phone;
+    }
+
+    public String getUserUID() {
+        return userUID;
+    }
+
+    public void setUserUID(String userUID) {
+        this.userUID = userUID;
     }
 
     public String getName() {
@@ -30,11 +41,19 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAddress() {
+        return address;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

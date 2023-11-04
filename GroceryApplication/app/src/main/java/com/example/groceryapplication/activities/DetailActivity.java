@@ -2,72 +2,64 @@ package com.example.groceryapplication.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
-import com.example.groceryapplication.MainActivity;
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.models.Item;
+import com.example.groceryapplication.utils.AndroidUtil;
+import com.example.groceryapplication.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
 public class DetailActivity extends AppCompatActivity {
-
     private static final int NOTIFICATION_ID = 1;
-    TextView quantity;
-
-
-    int totalQuantity = 1;
-    double totalPrice = 0;
-    ImageView img, add, remove;
-    TextView name, description, price;
-    Button addToCart;
-
-    FirebaseFirestore firestore;
-    FirebaseAuth auth;
-
-    Item item = null;
-
+    private TextView quantity;
+    private double totalQuantity = 0.1;
+    private double totalPrice = 0;
+    private ImageView img, add, remove;
+    private TextView name, description, price;
+    private Button addToCart;
+    private Item item = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-
-        firestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
+        // Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final Object object = getIntent().getSerializableExtra("detail");
         if (object instanceof Item) {
             item = (Item) object;
         }
-
-
         img = findViewById(R.id.item_detail_image);
         add = findViewById(R.id.add_item);
         remove = findViewById(R.id.remove_item);
@@ -76,13 +68,16 @@ public class DetailActivity extends AppCompatActivity {
         price = findViewById(R.id.item_detail_price);
         addToCart = findViewById(R.id.add_to_cart);
         quantity = findViewById(R.id.quantity);
+        DecimalFormat decimalFormat = new DecimalFormat("0.0");
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (totalQuantity < 10) {
-                    totalQuantity++;
-                    quantity.setText(String.valueOf(totalQuantity));
+                    totalQuantity = totalQuantity + 0.1;
+                    // Format totalQuantity to one decimal place
+                    String formattedQuantity = decimalFormat.format(totalQuantity);
+                    quantity.setText(formattedQuantity + " kg");
                     updateTotalPrice();
                 }
             }
@@ -91,99 +86,94 @@ public class DetailActivity extends AppCompatActivity {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (totalQuantity > 00) {
-                    totalQuantity--;
-                    quantity.setText(String.valueOf(totalQuantity));
+                if (totalQuantity > 0.1) {
+                    totalQuantity = totalQuantity - 0.1;
+                    // Format totalQuantity to one decimal place
+                    String formattedQuantity = decimalFormat.format(totalQuantity);
+                    quantity.setText(formattedQuantity + " kg");
                     updateTotalPrice();
                 }
             }
         });
-
-
         if (item != null) {
             Glide.with(getApplicationContext()).load(item.getImg_url()).into(img);
             name.setText(item.getName());
             description.setText(item.getDescription());
-            price.setText(item.getPrice());
+            price.setText(String.valueOf(item.getPrice()));
             updateTotalPrice();
-
         }
-
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addedToCart();
             }
         });
-
     }
 
     private void addedToCart() {
+        if (item == null) {
+            Toast.makeText(this, "Item details are missing.", Toast.LENGTH_LONG).show();
+            return;
+        }
         String saveCurrentDate, saveCurrentTime;
         Calendar calForDate = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
         saveCurrentDate = currentDate.format(calForDate.getTime());
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
         saveCurrentTime = currentTime.format(calForDate.getTime());
+
+
         final HashMap<String, Object> cartMap = new HashMap<>();
-        cartMap.put("productImg", item.getImg_url());
+        cartMap.put("product_img_url", item.getImg_url());
         cartMap.put("productName", item.getName());
-        cartMap.put("productPrice", price.getText().toString());
-        cartMap.put("currentDate", saveCurrentDate);
+        cartMap.put("productPrice", item.getPrice());
         cartMap.put("currentTime", saveCurrentTime);
-        cartMap.put("totalQuantity", quantity.getText().toString());
-        cartMap.put("totalPrice", String.valueOf(totalPrice));
+        cartMap.put("totalQuantity", totalQuantity);
+        cartMap.put("totalPrice", totalPrice);
 
-        firestore.collection("CurrentUser").document(auth.getCurrentUser().getUid()).collection("AddToCart").add(cartMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                Toast.makeText(DetailActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
-                showNotification("You have new item in your cart!");
-                finish();
-            }
-        });
-
-
+        // Get the reference to the user's cart collection
+        FirebaseUtil.userCartCollection().add(cartMap)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()) {
+                            AndroidUtil.showToast(DetailActivity.this, "Added to cart!");
+                            finish();
+                        } else {
+                            // Handle the error if the cart item could not be added.
+                            AndroidUtil.showToast(DetailActivity.this, "Failed to add to cart");
+                        }
+                    }
+                });
     }
 
-    private void showNotification(String message) {
-
-
-        // Create a notification channel for Android 8.0 and above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("app_channel", "App Channel", NotificationManager.IMPORTANCE_HIGH);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        // Create a notification with a custom layout
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "app_channel")
-                .setSmallIcon(R.drawable.ic_grocery)
-                .setContentTitle("Added new products to cart")
-                .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setWhen(0)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(message))
-                .setAutoCancel(true);
-                //.setContentIntent(pendingIntent); // Set the PendingIntent for the notification
-
-        // Show the notification with a fixed notification ID
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
-    }
 
     private void updateTotalPrice() {
-        totalPrice = Double.parseDouble(item.getPrice()) * totalQuantity;
+        if (item != null) {
+            totalPrice = item.getPrice() * totalQuantity;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_cart, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_cart) {
+            // Open CartFragment
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
+            navController.navigate(R.id.nav_cart);
+            return true;
+        } else if (itemId == R.id.action_home) {
+            Intent homeIntent = new Intent(this, HomeActivity.class);
+            startActivity(homeIntent);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }

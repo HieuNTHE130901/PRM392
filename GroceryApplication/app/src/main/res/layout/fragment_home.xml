@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.home.HomeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,17 +20,19 @@
 
             <TextView
                 android:id="@+id/fruit_title"
+                android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="Fruit"
-                android:textAlignment="center"
-                android:textColor="#000000"
+                android:text="Fruit  🍉🍎🥝🥑️"
+                android:layout_marginLeft="20dp"
+                android:textColor="#FF002E"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:padding="5dp"
                 android:id="@+id/rec_fruit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,15 +42,27 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/fruit_title" />
 
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_link"
+                app:layout_constraintVertical_bias=".1" />
+
             <TextView
                 android:id="@+id/vegetable_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="Vegetable"
-                android:textAlignment="center"
-                android:textColor="#000000"
+                android:text="Vegetable  🥦🌽🥬🌶"
+                android:paddingLeft="20dp"
+                android:textColor="#FF002E"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -54,6 +71,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
+                android:padding="5dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/vegetable_title" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="Meat  🥦🌽🥬🌶"
+                android:paddingLeft="20dp"
+                android:textColor="#FF002E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rec_meat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:padding="5dp"
                 android:paddingBottom="16dp"
                 android:paddingTop="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

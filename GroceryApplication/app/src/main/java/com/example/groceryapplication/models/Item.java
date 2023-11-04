@@ -6,13 +6,13 @@ public class Item implements Serializable {
     private String name;
     private String img_url;
     private String description;
-    private String price;
+    private double price;
 
 
     public Item() {
     }
 
-    public Item(String name, String img_url, String description, String price) {
+    public Item(String name, String img_url, String description, double price) {
         this.name = name;
         this.img_url = img_url;
         this.description = description;
@@ -43,11 +43,12 @@ public class Item implements Serializable {
         this.description = description;
     }
 
-    public String getPrice() {
+
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

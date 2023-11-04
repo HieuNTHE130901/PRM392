@@ -9,16 +9,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#FFD1D9"
         android:orientation="horizontal"
         android:padding="10dp">
 
         <ImageView
             android:id="@+id/nav_cat_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop" />
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_home" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +35,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Product Name: "
+                    android:text="Name: "
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -49,49 +50,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Date: "
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/nav_cat_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Date"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Time: "
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/nav_cat_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Time"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -102,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:text="Price: "
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -111,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:text="Price"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -124,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:text="Quantity: "
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -133,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:text="Quantity"
                     android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -145,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total Price: "
-                    android:textColor="@android:color/black"
+                    android:textColor="#F63131"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -154,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="total price"
-                    android:textColor="@android:color/black"
+                    android:textColor="#F63131"
                     android:textSize="16sp" />
 
 
@@ -163,12 +121,35 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/delete"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:baselineAligned="false"
-            android:src="@drawable/ic_delete" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/delete"
+                android:layout_width="38dp"
+                android:layout_height="39dp"
+                android:baselineAligned="false"
+                android:src="@drawable/ic_delete" />
+
+            <Button
+                android:id="@+id/btn_add"
+                android:layout_width="39dp"
+                android:layout_height="25dp"
+                android:foreground="@color/black"
+                android:text="add"
+                android:textColor="@color/red" />
+
+            <Button
+                android:id="@+id/btn_remove"
+                android:layout_width="38dp"
+                android:layout_height="28dp"
+                android:foreground="@color/green"
+                android:text="add"
+                android:textColor="@color/red" />
+        </LinearLayout>
+
 
     </LinearLayout>
 
