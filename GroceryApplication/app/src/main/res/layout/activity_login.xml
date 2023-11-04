@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent=".8" />
 
-    <!-- Password EditText -->
+
     <EditText
         android:id="@+id/login_password"
         android:layout_width="0dp"
