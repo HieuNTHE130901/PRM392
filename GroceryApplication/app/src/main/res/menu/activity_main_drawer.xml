@@ -8,10 +8,7 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_account"
-            android:title="@string/menu_profile" />
+
         <item
             android:id="@+id/nav_chat"
             android:icon="@drawable/chat_round_like_svgrepo_com"
@@ -31,7 +28,7 @@
             android:id="@+id/nav_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_map"
+            android:icon="@drawable/shipping_fast_solid_svgrepo_com"
             android:title="@string/menu_order" />
         <item
             android:id="@+id/nav_log_out"

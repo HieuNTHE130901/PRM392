@@ -37,33 +37,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
-
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
     private CartFragment cartFragment;
-
-
     List<Cart> categoryList;
     CartAdapter cartAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Set-up homepage.
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.appBarHome.toolbar);
-
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home
-        )
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home)
                 .setOpenableLayout(drawer)
                 .build();
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -78,32 +69,38 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                           // categoryList.clear(); // Clear the list before adding items
+                            // Clear the list before adding items
+                            categoryList.clear();
+
                             for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
-                                String docummentId = documentSnapshot.getId();
+                                String documentId = documentSnapshot.getId();
                                 Cart cart = documentSnapshot.toObject(Cart.class);
-                                cart.setDocummentId(docummentId);
+                                cart.setDocummentId(documentId);
                                 categoryList.add(cart);
                             }
                             cartAdapter.notifyDataSetChanged();
+
                             // Calculate the total and check if the cart has products
                             if (categoryList.isEmpty()) {
                                 // The cart is empty
-                                showNotification("Your cart is empty !!!", "Go buy some product now!");
+                                showNotification("Your cart is empty !!!", "Go buy some products now!");
                             } else {
-                                showNotification("Your cart have some items", "Go buy it now!");
+                                showNotification("Your cart has some items", "Go buy them now!");
                             }
                         }
                     }
                 });
     }
 
+
+    //Toolbar and Navbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_cart, menu);
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -128,6 +125,8 @@ public class HomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
+    //Show notification if cart have product or not
     private static final int NOTIFICATION_ID = 1;
 
     public void showNotification(String title, String message) {
@@ -147,7 +146,6 @@ public class HomeActivity extends AppCompatActivity {
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(message))
                 .setAutoCancel(true);
-        //.setContentIntent(pendingIntent); // Set the PendingIntent for the notification
 
         // Show the notification with a fixed notification ID
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);

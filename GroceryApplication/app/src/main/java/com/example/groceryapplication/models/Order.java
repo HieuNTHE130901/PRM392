@@ -2,6 +2,8 @@ package com.example.groceryapplication.models;
 
 public class Order {
 
+    String customerName;
+    String customerId;
     String date;
     String time;
     String address;
@@ -12,23 +14,21 @@ public class Order {
     public Order() {
     }
 
-    public Order(String date, String time, String address, double orderValue, String status) {
-
-        this.date = date;
-        this.time = time;
-        this.address = address;
-        this.orderValue = orderValue;
-        this.status = status;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public String getDocummentId() {
-        return docummentId;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
-    public void setDocummentId(String docummentId) {
-        this.docummentId = docummentId;
+    public String getCustomerName() {
+        return customerName;
     }
 
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
     public String getDate() {
         return date;
@@ -70,5 +70,11 @@ public class Order {
         this.status = status;
     }
 
+    public String getDocummentId() {
+        return docummentId;
+    }
 
+    public void setDocummentId(String docummentId) {
+        this.docummentId = docummentId;
+    }
 }

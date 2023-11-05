@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +40,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     @NonNull
     @Override
     public CartAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cart, parent, false));
     }
 
@@ -57,7 +57,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.price.setText(AndroidUtil.formatPrice(productPrice));
         holder.totalprice.setText(AndroidUtil.formatPrice(totalPrice));
         DecimalFormat quantityFormat = new DecimalFormat("##.#");
-        String formattedQuantity = quantityFormat.format(cartItem.getTotalQuantity());
+        String formattedQuantity = quantityFormat.format(cartItem.getTotalQuantity())+" kg";
         holder.quantity.setText(formattedQuantity);
 
 
@@ -67,7 +67,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 // Increment the total quantity and update the UI
                 cartItem.setTotalQuantity(cartItem.getTotalQuantity() + 0.1);
                 DecimalFormat quantityFormat = new DecimalFormat("##.#");
-                String formattedQuantity = quantityFormat.format(cartItem.getTotalQuantity());
+                String formattedQuantity = quantityFormat.format(cartItem.getTotalQuantity())+" kg";
                 holder.quantity.setText(formattedQuantity);
 
                 // Update the total price and UI
@@ -90,7 +90,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     // Decrement the total quantity and update the UI
                     cartItem.setTotalQuantity(cartItem.getTotalQuantity() - 0.1);
                     DecimalFormat quantityFormat = new DecimalFormat("##.#");
-                    String formattedQuantity = quantityFormat.format(cartItem.getTotalQuantity());
+                    String formattedQuantity = quantityFormat.format(cartItem.getTotalQuantity())+" kg";
                     holder.quantity.setText(formattedQuantity);
 
                     // Update the total price and UI
@@ -137,7 +137,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                             notifyDataSetChanged();
                             // Update the total price by calling a method in the CartFragment
                             cartFragment.updateTotalPrice(); // Call the method in the CartFragment
-
                             Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
@@ -159,7 +158,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         ImageView img, deleteItem;
         TextView name, price, totalprice, quantity;
 
-        Button add, remove;
+        ImageButton add, remove;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
