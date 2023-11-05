@@ -39,7 +39,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class DetailActivity extends AppCompatActivity {
-    private static final int NOTIFICATION_ID = 1;
     private TextView quantity;
     private double totalQuantity = 0.1;
     private double totalPrice = 0;
@@ -122,7 +121,7 @@ public class DetailActivity extends AppCompatActivity {
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
         saveCurrentTime = currentTime.format(calForDate.getTime());
 
-
+        // Create a HashMap to store cart item information
         final HashMap<String, Object> cartMap = new HashMap<>();
         cartMap.put("product_img_url", item.getImg_url());
         cartMap.put("productName", item.getName());
@@ -131,7 +130,7 @@ public class DetailActivity extends AppCompatActivity {
         cartMap.put("totalQuantity", totalQuantity);
         cartMap.put("totalPrice", totalPrice);
 
-        // Get the reference to the user's cart collection
+        // Get the reference to the user's cart collection and add the cart item
         FirebaseUtil.userCartCollection().add(cartMap)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
@@ -147,7 +146,6 @@ public class DetailActivity extends AppCompatActivity {
                 });
     }
 
-
     private void updateTotalPrice() {
         if (item != null) {
             totalPrice = item.getPrice() * totalQuantity;
@@ -160,6 +158,7 @@ public class DetailActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
