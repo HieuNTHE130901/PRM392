@@ -1,7 +1,5 @@
 # PRM392
 
-Tham khảo code ở đây
-https://www.youtube.com/playlist?list=PLesEwfOYAU4YcaYveepDhq3wQI4iqLlPe
 
 • Develop an Product Sale Application
 
