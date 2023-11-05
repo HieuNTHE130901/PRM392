@@ -55,7 +55,6 @@ public class ChatMessageAdapter extends FirestoreRecyclerAdapter<ChatMessage, Ch
 
         public ChatMessageViewHolder(@NonNull View itemView) {
             super(itemView);
-
             leftChatLayout = itemView.findViewById(R.id.left_chat_layout);
             rightChatLayout = itemView.findViewById(R.id.right_chat_layout);
             leftChatTextview = itemView.findViewById(R.id.left_chat_textview);

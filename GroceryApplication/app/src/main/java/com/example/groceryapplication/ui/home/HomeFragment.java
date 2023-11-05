@@ -33,13 +33,9 @@ public class HomeFragment extends Fragment {
     List<Item> vegetableList;
 
     List<Item> meatList;
-
-
     RecyclerView fruitRecycle;
     RecyclerView vegetableRecycle;
-
     RecyclerView meatRec;
-
 
     ItemAdapter vegetableAdapter;
     ItemAdapter fruitAdapter;
