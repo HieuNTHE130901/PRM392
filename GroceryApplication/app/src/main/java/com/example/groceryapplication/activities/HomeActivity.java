@@ -64,6 +64,16 @@ public class HomeActivity extends AppCompatActivity {
         cartAdapter = new CartAdapter(this, categoryList, cartFragment);
 
         // Check if the cart has products
+        checkCartAndShowNotification();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkCartAndShowNotification();
+    }
+
+    private void checkCartAndShowNotification(){
         FirebaseUtil.userCartCollection().get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
