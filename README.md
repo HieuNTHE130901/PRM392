@@ -21,31 +21,6 @@
 
 
 
-
-
-Project đã làm:
-
-
-– Sign Up/Login screen: manage users
-
-– List of Products screen: show list of products
-
-– Product details screen: show information of a product
-
-– Product Cart screen: show products that user selects to buy
-
-– Map screen: show Store’s location
-
-– Show a notification if Cart has products when opening the application
-
-– Billing screen: process payment of user
-
-
-Còn thiếu: 
-
-
-
-
 Hiếu: 
 
 – Billing screen: process payment of user
@@ -62,8 +37,7 @@ Nghĩa:
 
 
 Cường: 
-- Product Cart screen: show products that user selects to buy 
-
+- Product Cart screen: show products that user selects to buy
 
 
 Huy: 
