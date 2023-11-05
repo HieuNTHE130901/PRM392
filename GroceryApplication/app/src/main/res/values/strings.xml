@@ -13,16 +13,18 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="profile">Profile</string>
     <string name="category">Category</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="offers">Offers</string>
     <string name="newProduct">New Products</string>
     <string name="myOrders">My Orders</string>
     <string name="myCarts">My Carts</string>
     <string name="menu_profile">Profile</string>
-    <string name="menu_new_product">New Product</string>
-    <string name="offer">Offer</string>
+    <string name="menu_chat">Chat with store</string>
+    <string name="offer">My Cart</string>
     <string name="menu_offer">Offer</string>
     <string name="menu_map">Store location</string>
     <string name="menu_mapp">Store location</string>
+    <string name="menu_cart">My Cart</string>
+    <string name="log_out">Log out</string>
+    <string name="menu_order">My order</string>
 </resources>

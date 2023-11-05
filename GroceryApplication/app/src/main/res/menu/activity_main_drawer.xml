@@ -8,26 +8,34 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
             android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_account"
-            android:title="@string/menu_profile" />
-        <item
-            android:id="@+id/nav_new_product"
-            android:icon="@drawable/ic_new"
-            android:title="@string/menu_new_product" />
-
 
         <item
-            android:id="@+id/nav_offer"
-            android:icon="@drawable/ic_offer"
-            android:title="@string/menu_offer" />
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/chat_round_like_svgrepo_com"
+            android:title="@string/menu_chat" />
+
+        <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/ic_cart"
+            android:title="@string/menu_cart" />
         <item
             android:id="@+id/nav_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:icon="@drawable/ic_map"
             android:title="@string/menu_map" />
+        <item
+            android:id="@+id/nav_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/shipping_fast_solid_svgrepo_com"
+            android:title="@string/menu_order" />
+        <item
+            android:id="@+id/nav_log_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/out_svgrepo_com"
+            android:title="@string/log_out" />
 
 
     </group>
