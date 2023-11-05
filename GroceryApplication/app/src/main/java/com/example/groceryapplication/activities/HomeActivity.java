@@ -75,12 +75,22 @@ public class HomeActivity extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(this, categoryList, cartFragment);
 
         // Check if the cart has products
+        checkCartAndShowNotification();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkCartAndShowNotification();
+    }
+
+    private void checkCartAndShowNotification(){
         FirebaseUtil.userCartCollection().get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                           // categoryList.clear(); // Clear the list before adding items
+                            // categoryList.clear(); // Clear the list before adding items
                             for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
                                 String docummentId = documentSnapshot.getId();
                                 Cart cart = documentSnapshot.toObject(Cart.class);
