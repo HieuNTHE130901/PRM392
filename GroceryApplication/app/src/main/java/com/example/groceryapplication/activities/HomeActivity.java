@@ -63,7 +63,16 @@ public class HomeActivity extends AppCompatActivity {
         categoryList = new ArrayList<>();
         cartAdapter = new CartAdapter(this, categoryList, cartFragment);
 
-        // Check if the cart has products
+        checkCartAndShowNotification();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkCartAndShowNotification();
+    }
+
+    private void checkCartAndShowNotification(){
         FirebaseUtil.userCartCollection().get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -91,6 +100,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 
     //Toolbar and Navbar
@@ -154,5 +164,6 @@ public class HomeActivity extends AppCompatActivity {
         }
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
+
 
 }
