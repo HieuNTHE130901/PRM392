@@ -27,7 +27,7 @@ import com.google.firebase.firestore.Query;
         private OrderAdapter orderAdapter;
         private RecyclerView recyclerView;
         private Button chatButton;
-        private NavController navController; // Add this line
+        private NavController navController;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

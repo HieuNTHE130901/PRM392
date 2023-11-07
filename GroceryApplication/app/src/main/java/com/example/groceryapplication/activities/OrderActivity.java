@@ -46,7 +46,7 @@ public class OrderActivity extends AppCompatActivity {
     EditText paymentAddressNew;
     EditText edtVoucher;
     CheckBox addressCheckbox;
-    Button payButton;
+    Button orderButton;
     Button applyVoucher;
     List<Voucher> voucherList;
     Map<String, Object> paymentInfo = new HashMap<>();
@@ -66,7 +66,7 @@ public class OrderActivity extends AppCompatActivity {
         paymentAddressNew = findViewById(R.id.payment_address_new);
         edtVoucher = findViewById(R.id.payment_edt_voucher);
         addressCheckbox = findViewById(R.id.address_checkbox);
-        payButton = findViewById(R.id.payment_pay_btn);
+        orderButton = findViewById(R.id.payment_pay_btn);
         applyVoucher = findViewById(R.id.payment_bnt_voucher);
         voucherList = new ArrayList<>();
 
@@ -166,7 +166,7 @@ public class OrderActivity extends AppCompatActivity {
         });
 
         // Handle pay button
-        payButton.setOnClickListener(new View.OnClickListener() {
+        orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

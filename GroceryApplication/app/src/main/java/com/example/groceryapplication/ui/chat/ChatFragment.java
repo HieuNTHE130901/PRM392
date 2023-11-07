@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 public class ChatFragment extends Fragment {
 
+    // Member variables for UI elements and data
     EditText messageInput;
     ImageButton sendMessageBtn;
     RecyclerView recyclerView;
@@ -39,25 +40,33 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_chat, container, false);
 
+        // Generate a unique chatroom ID
         chatroomId = FirebaseUtil.currentUserId() + "_" + ADMIN_UID;
+
+        // Initialize UI elements
         messageInput = root.findViewById(R.id.chat_message_input);
         sendMessageBtn = root.findViewById(R.id.message_send_btn);
         recyclerView = root.findViewById(R.id.chat_recycler_view);
 
+        // Create or retrieve the chat room from Firebase
+        getOrCreateChatroomModel();
+
+        // Set up the chat message RecyclerView
+        setupChatRecyclerView();
+
+        // Handle sending messages when the send button is clicked
         sendMessageBtn.setOnClickListener(v -> {
             String message = messageInput.getText().toString().trim();
             messageInput.setText("");
             if (!message.isEmpty()) {
-                sendMessageToUser(message);
+                sendMessage(message);
             }
         });
-
-        getOrCreateChatroomModel();
-        setupChatRecyclerView();
 
         return root;
     }
 
+    // Load chat messages from Firestore database and set up RecyclerView
     private void setupChatRecyclerView() {
         Query query = FirebaseUtil.getChatroomMessageReference(chatroomId)
                 .orderBy("timestamp", Query.Direction.DESCENDING);
@@ -70,6 +79,8 @@ public class ChatFragment extends Fragment {
         manager.setReverseLayout(true);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        // Scroll to the latest message when a new message is added
         adapter.startListening();
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -80,7 +91,8 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    private void sendMessageToUser(String message) {
+    // Send a new chat message
+    private void sendMessage(String message) {
         chatroomModel.setLastMessageTimestamp(Timestamp.now());
         chatroomModel.setLastSenderId(FirebaseUtil.currentUserId());
         chatroomModel.setLastMessage(message);
@@ -95,11 +107,13 @@ public class ChatFragment extends Fragment {
                 });
     }
 
+    // Join an existing chat room in the Firestore database or create a new one
     private void getOrCreateChatroomModel() {
         FirebaseUtil.getChatroomReference(chatroomId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 chatroomModel = task.getResult().toObject(ChatRoom.class);
                 if (chatroomModel == null) {
+                    // If the chat room doesn't exist, create a new one
                     chatroomModel = new ChatRoom(chatroomId,
                             Arrays.asList(FirebaseUtil.currentUserId(), ADMIN_UID),
                             Timestamp.now(),

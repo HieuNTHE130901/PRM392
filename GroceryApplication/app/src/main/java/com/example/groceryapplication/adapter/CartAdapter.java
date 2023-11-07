@@ -104,7 +104,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     // Update the total price in CartFragment
                     cartFragment.updateTotalPrice();
                 } else {
-                    // If the total quantity is 1, consider deleting the item
+                    // If the total quantity is 0.1, consider deleting the item
                     FirebaseUtil.userCartCollection().document(cartItem.getDocummentId())
                             .delete()
                             .addOnCompleteListener(new OnCompleteListener<Void>() {

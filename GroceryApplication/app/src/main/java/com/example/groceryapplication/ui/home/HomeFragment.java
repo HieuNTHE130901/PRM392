@@ -36,10 +36,8 @@ public class HomeFragment extends Fragment {
     RecyclerView fruitRecycle;
     RecyclerView vegetableRecycle;
     RecyclerView meatRec;
-
     ItemAdapter vegetableAdapter;
     ItemAdapter fruitAdapter;
-
     ItemAdapter meatAdapter;
 
 
@@ -50,17 +48,15 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        // Initialize the ProgressBar
-        progressBar = root.findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.GONE);
 
         // Load fruit data
+
+        //set up Fruit recycle
         fruitRecycle = root.findViewById(R.id.rec_fruit);
         fruitRecycle.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
-        fruitList = new ArrayList<>();
-        fruitAdapter = new ItemAdapter(getActivity(), fruitList);
-        fruitRecycle.setAdapter(fruitAdapter);
 
+        //Take fruit list from Firestore
+        fruitList = new ArrayList<>();
         // Retrieve fruit data from Firestore using FirebaseUtil
         FirebaseUtil.fruitCollection()
                 .get()
@@ -78,6 +74,12 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 });
+
+        //Use adapter to set recyclerView
+        fruitAdapter = new ItemAdapter(getActivity(), fruitList);
+        fruitRecycle.setAdapter(fruitAdapter);
+
+
 
         // Load vegetable data
         vegetableRecycle = root.findViewById(R.id.rec_vegetable);

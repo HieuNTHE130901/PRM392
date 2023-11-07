@@ -98,7 +98,7 @@ public class DetailActivity extends AppCompatActivity {
             Glide.with(getApplicationContext()).load(item.getImg_url()).into(img);
             name.setText(item.getName());
             description.setText(item.getDescription());
-            price.setText(String.valueOf(item.getPrice()));
+            price.setText(AndroidUtil.formatPrice(item.getPrice()));
             updateTotalPrice();
         }
         addToCart.setOnClickListener(new View.OnClickListener() {

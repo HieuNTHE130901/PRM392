@@ -7,7 +7,6 @@ import java.util.List;
 public class ChatRoom {
     private String roomId;
     private List<String> participants;
-
     Timestamp lastMessageTimestamp;
     String lastSenderId;
     String lastMessage;
