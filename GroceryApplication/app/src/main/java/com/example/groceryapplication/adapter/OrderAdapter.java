@@ -35,7 +35,6 @@ public class OrderAdapter extends FirestoreRecyclerAdapter<Order, OrderAdapter.V
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, date, time, address, orderValue, status;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.order_name);

@@ -4,6 +4,8 @@ import com.google.firebase.Timestamp;
 
 public class ChatMessage {
     private String message;
+
+
     private Timestamp timestamp;
     private String senderId;
     public ChatMessage() {

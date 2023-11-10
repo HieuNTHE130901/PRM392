@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.groceryapplication.R;
 import com.example.groceryapplication.models.ChatMessage;
+
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +36,7 @@ public class ChatMessageAdapter extends FirestoreRecyclerAdapter<ChatMessage, Ch
             // Set the message text in the right chat layout
             holder.rightChatTextview.setText(model.getMessage());
         } else {
-            // If the message was sent by the other user,
+            // If the message was sent by the admin,
             // hide the right chat layout and show the left chat layout
             holder.rightChatLayout.setVisibility(View.GONE);
             holder.leftChatLayout.setVisibility(View.VISIBLE);

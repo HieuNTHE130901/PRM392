@@ -23,7 +23,7 @@ public class MapsFragment extends Fragment {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng fpt = new LatLng(21.01326111138678, 105.52658803823091);
+            LatLng fpt = new LatLng(9.833171380332958, 105.5011688024721);
             googleMap.addMarker(new MarkerOptions().position(fpt).title("Store Location"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(fpt));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fpt, 15));

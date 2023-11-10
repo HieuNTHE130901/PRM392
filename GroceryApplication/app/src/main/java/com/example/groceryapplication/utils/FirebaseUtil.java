@@ -19,6 +19,7 @@ public class FirebaseUtil {
         return FirebaseAuth.getInstance().getUid();
     }
 
+
     // Get a reference to the current user's information document
     public static DocumentReference currentUserInfoDocument() {
         return FirebaseFirestore.getInstance().collection("users")
